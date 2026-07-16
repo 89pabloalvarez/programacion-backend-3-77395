@@ -1,19 +1,19 @@
 {
   "name": "backend3",
   "version": "1.0.0",
-  "description": "Parte 3 de backend del curso de Full Stack",
-  "main": "index.js",
+  "description": "Repositorio creado para presentar las entregas de la comisión: #77395-programación-backend-3\r",
+  "main": "src/server.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/server.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/89pabloalvarez/programacion-backend-3-77395.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Pablo Alvarez",
   "license": "ISC",
-  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/89pabloalvarez/programacion-backend-3-77395/issues"
   },
@@ -21,6 +21,10 @@
   "dependencies": {
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "mongoose": "^9.7.4"
+    "mongoose": "^9.7.4",
+    "express-handlebars": "^8.0.6",
+    "mongodb": "^7.1.0",
+    "mongoose-paginate-v2": "^1.9.4",
+    "socket.io": "^4.8.3"
   }
 }
