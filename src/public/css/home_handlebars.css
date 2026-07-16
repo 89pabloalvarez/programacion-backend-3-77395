@@ -1,0 +1,66 @@
+.title {
+  text-align: center;
+  margin: 1.5rem 0;
+  font-size: 2rem;
+  color: #333;
+}
+
+.product {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 1rem;
+  margin: 1rem auto;
+  max-width: 600px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.product img.productImage {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0.5rem auto;
+}
+
+.name {
+  margin: 0.5rem 0;
+  text-align: center;
+  font-size: 1.5rem;
+  color: #222;
+}
+
+.description,
+.price,
+.status,
+.stock,
+.category {
+  margin: 0.3rem 0;
+  font-size: 1rem;
+  color: #555;
+}
+
+.price {
+  font-weight: bold;
+  color: #007b00;
+}
+
+.status {
+  font-style: italic;
+}
+
+.category {
+  color: #0066cc;
+}
+
+@media (max-width: 600px) {
+  .product {
+    margin: 0.5rem;
+    padding: 0.8rem;
+  }
+  .title {
+    font-size: 1.5rem;
+  }
+  .name {
+    font-size: 1.2rem;
+  }
+}
