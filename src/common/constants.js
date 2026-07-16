@@ -1,4 +1,4 @@
-export const CONSTANTS = {
+export const CONSTANTS = Object.freeze({
     PORT: 8080,
     BASEURL: `http://localhost:8080`,
     DIR_URL_ROOT: '/api',
@@ -46,4 +46,4 @@ export const CONSTANTS = {
         productId: "string",
         quantity: "number"
     }
-}
+})
