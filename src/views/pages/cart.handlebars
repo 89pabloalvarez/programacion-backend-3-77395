@@ -1,0 +1,35 @@
+<h1 class="title">🛒 Carrito</h1>
+
+{{#if error}}
+  <p class="cart-error">{{error}}</p>
+{{else if emptyCart}}
+  <p class="placeholder">El carrito <code>{{cartId}}</code> está vacío.</p>
+{{else}}
+  <p class="cart-id">ID del carrito: <code>{{cartId}}</code></p>
+  <table class="cart-table">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Precio unitario</th>
+        <th>Cantidad</th>
+        <th>Subtotal</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each products}}
+        <tr>
+          <td>{{this.product.title}}</td>
+          <td class="price">${{this.product.price}}</td>
+          <td class="quantity">{{this.quantity}}</td>
+          <td class="price">${{this.subtotal}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="3" class="total-label">Total</td>
+        <td class="price total-value">${{total}}</td>
+      </tr>
+    </tfoot>
+  </table>
+{{/if}}

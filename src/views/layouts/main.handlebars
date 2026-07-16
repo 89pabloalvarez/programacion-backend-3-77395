@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset='utf-8'>
+    <title>{{page_title}}</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' href='/css/main_handlebars.css'>
+    <link rel='stylesheet' href='/css/navbar_handlebars.css'>
+    <link rel='stylesheet' href='/css/home_handlebars.css'>
+    <link rel='stylesheet' href='/css/real_time_products_handlebars.css'>
+    <link rel='stylesheet' href='/css/pagination.css'>
+    <link rel='stylesheet' href='/css/cart_handlebars.css'>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+</head>
+<body>
+    <header>
+        {{> navbar}}
+        <h1>{{page_title}}</h1>
+    </header>
+    <main>
+        {{{body}}}
+    </main>
+    <footer>
+        <p>&copy; 2026 - Pablo Alvarez</p>
+    </footer>
+</body>
+</html>

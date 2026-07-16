@@ -1,0 +1,106 @@
+<h1 class="title">Lista de Productos</h1>
+
+{{#if pagination.isEmpty}}
+  <p class="placeholder">No hay productos para mostrar en esta página.</p>
+{{else}}
+  {{#each products}}
+    <div class="product" id="{{this._id}}">
+      <h2 class="name">{{this.title}}</h2>
+      <img src="{{this.thumbnails.[0]}}" alt="{{this.title}}" class="productImage">
+      <p class="description">Descripción: {{this.description}}</p>
+      <p class="price">Precio: ${{this.price}}</p>
+      <p class="status">Disponible: {{this.status}}</p>
+      <p class="stock">Stock: {{this.stock}}</p>
+      <p class="category">Categoría: {{this.category}}</p>
+    </div>
+  {{/each}}
+{{/if}}
+
+<div id="pagination-controls">
+
+  {{!-- Botones de ordenamiento --}}
+  <div class="pagination-row">
+    {{#if (eq pagination.sort 'asc')}}
+      <span class="page-btn disabled">↑ Menor precio</span>
+    {{else}}
+      <a class="page-btn" href="/?page=1&limit={{pagination.limit}}&sort=asc">↑ Menor precio</a>
+    {{/if}}
+
+    {{#if (eq pagination.sort 'desc')}}
+      <span class="page-btn disabled">↓ Mayor precio</span>
+    {{else}}
+      <a class="page-btn" href="/?page=1&limit={{pagination.limit}}&sort=desc">↓ Mayor precio</a>
+    {{/if}}
+
+    {{#if pagination.sort}}
+      <a class="page-btn" href="/?page=1&limit={{pagination.limit}}">✕ Sin orden</a>
+    {{/if}}
+  </div>
+
+  <div class="pagination-info">
+    Mostrando página <strong>{{pagination.page}}</strong> de <strong>{{pagination.totalPages}}</strong>
+    ({{pagination.totalDocs}} productos en total)
+  </div>
+
+  <div class="pagination-row">
+
+    {{#if pagination.hasPrevPage}}
+      <a class="page-btn" href="/?page={{pagination.prevPage}}&limit={{pagination.limit}}&sort={{pagination.sort}}">← Anterior</a>
+    {{else}}
+      <span class="page-btn disabled">← Anterior</span>
+    {{/if}}
+
+    <form class="page-jump-form" method="GET" action="/">
+      <input type="hidden" name="limit" value="{{pagination.limit}}">
+      <input type="hidden" name="sort"  value="{{pagination.sort}}">
+      <label for="pageInput">Página:</label>
+      <input
+        id="pageInput"
+        type="number"
+        name="page"
+        value="{{pagination.page}}"
+        min="1"
+        max="{{pagination.totalPages}}"
+        class="page-input"
+      >
+      <span class="page-total">/ {{pagination.totalPages}}</span>
+      <button type="submit" class="page-btn go-btn">Ir</button>
+    </form>
+
+    {{#if pagination.hasNextPage}}
+      <a class="page-btn" href="/?page={{pagination.nextPage}}&limit={{pagination.limit}}&sort={{pagination.sort}}">Siguiente →</a>
+    {{else}}
+      <span class="page-btn disabled">Siguiente →</span>
+    {{/if}}
+
+  </div>
+
+  <div class="pagination-row">
+    <label for="limitSelect">Registros por página:</label>
+    <select id="limitSelect" class="limit-select" onchange="changeLimit(this.value)">
+      <option value="5"  {{#if (eq pagination.limit 5)}}selected{{/if}}>5</option>
+      <option value="10" {{#if (eq pagination.limit 10)}}selected{{/if}}>10</option>
+      <option value="15" {{#if (eq pagination.limit 15)}}selected{{/if}}>15</option>
+      <option value="20" {{#if (eq pagination.limit 20)}}selected{{/if}}>20</option>
+      <option value="50" {{#if (eq pagination.limit 50)}}selected{{/if}}>50</option>
+    </select>
+  </div>
+
+</div>
+
+<script>
+  function changeLimit(newLimit) {
+    window.location.href = '/?page=1&limit=' + newLimit + '&sort={{pagination.sort}}'
+  }
+
+  document.querySelector('.page-jump-form').addEventListener('submit', function(e) {
+    const input = document.getElementById('pageInput')
+    const val = parseInt(input.value)
+    const max = parseInt(input.max)
+    if (isNaN(val) || val < 1 || val > max) {
+      e.preventDefault()
+      alert(`Número de página inválido. Ingresá un valor entre 1 y ${max}.`)
+      input.focus()
+    }
+  })
+</script>
