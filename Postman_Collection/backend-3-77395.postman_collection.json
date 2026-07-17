@@ -1,0 +1,1478 @@
+{
+  "info": {
+    "_postman_id": "6bf5296b-5f1b-4d92-869e-e0acb4c1816d",
+    "name": "backend-3-77395",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "3256458"
+  },
+  "item": [
+    {
+      "name": "products",
+      "item": [
+        {
+          "name": "GetAll",
+          "item": [
+            {
+              "name": "getAllProducts (DEFAULT)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/products",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "products"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getAllProducts (PAGINADO + limit=5)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/products?limit=5",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "products"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "5"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getAllProducts (PAGINADO + limit=5 + page=2)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/products?limit=5&page=2",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "products"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "5"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getAllProducts (PAGINADO + limit=15)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/products?limit=15",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "products"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "15"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "GetById",
+          "item": [
+            {
+              "name": "getProductById (OK)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/products/69ced9fc9008912f29a16c90",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "products",
+                    "69ced9fc9008912f29a16c90"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getProductById (NOK producto no encontrado)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/products/69ced9fc9008912f29a15c94",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "products",
+                    "69ced9fc9008912f29a15c94"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getProductById (NOK ID con mal formato)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/products/6",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "products",
+                    "6"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Create",
+          "item": [
+            {
+              "name": "createProduct (OK)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"title\": \"aaaaaaaaaaaa\",\r\n    \"price\": 55.55,\r\n    \"category\": \"Varios\",\r\n    \"thumbnails\": [\"https://fake-dir.com/fake-pic.png\", \"https://fake-dir.com/fake-pic2.png\"],\r\n    \"description\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\r\n    \"stock\": 10\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/products",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "products"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "createProduct (OK 1 campo de más)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"title\": \"aaaaaaaaaaaa\",\r\n    \"price\": 55.55,\r\n    \"category\": \"Varios\",\r\n    \"campoDeMas\": \"como es? mondiola o bondiola? mondiola o bondiola??\",\r\n    \"thumbnails\": [\"https://fake-dir.com/fake-pic.png\", \"https://fake-dir.com/fake-pic2.png\"],\r\n    \"description\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\r\n    \"stock\": 10\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/products",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "products"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "createProduct (OK 2 campos de más)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"title\": \"aaaaaaaaaaaa\",\r\n    \"price\": 55.55,\r\n    \"category\": \"Varios\",\r\n    \"campoDeMas\": \"como es? mondiola o bondiola? mondiola o bondiola??\",\r\n    \"thumbnails\": [\"https://fake-dir.com/fake-pic.png\", \"https://fake-dir.com/fake-pic2.png\"],\r\n    \"description\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\r\n    \"otroCampoDeMas\": \"torta de ricota\",\r\n    \"stock\": 10\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/products",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "products"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "createProduct (NOK falta 1 campo)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"title\": \"aaaaaaaaaaaa\",\r\n    \"category\": \"Varios\",\r\n    \"thumbnails\": [\"https://fake-dir.com/fake-pic.png\", \"https://fake-dir.com/fake-pic2.png\"],\r\n    \"description\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\r\n    \"stock\": 10\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/products",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "products"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "createProduct (NOK faltan 2 campos)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"title\": \"aaaaaaaaaaaa\",\r\n    \"category\": \"Varios\",\r\n    \"thumbnails\": [\"https://fake-dir.com/fake-pic.png\", \"https://fake-dir.com/fake-pic2.png\"],\r\n    \"description\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/products",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "products"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "createProduct (NOK falta 1 campo y hay 2 campos de más)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"title\": \"aaaaaaaaaaaa\",\r\n    \"category\": \"Varios\",\r\n    \"campoDeMas\": \"Cómo se dice tengolpor o telgopor? Tergonpor o tegolpor? me esta volviendo loco!!\",\r\n    \"thumbnails\": [\"https://fake-dir.com/fake-pic.png\", \"https://fake-dir.com/fake-pic2.png\"],\r\n    \"otroCampoDeMas\": \"torta de ricota\",\r\n    \"description\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\r\n    \"stock\": 10\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/products",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "products"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "createProduct (NOK formato de 2 campos incorrectos)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"title\": \"aaaaaaaaaaaa\",\r\n    \"category\": \"Varios\",\r\n    \"thumbnails\": \"https://fake-dir.com/fake-pic.png\",\r\n    \"description\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\r\n    \"price\": \"50\",\r\n    \"stock\": 10\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/products",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "products"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "createProduct (NOK falta 1 campo, hay 2 campos de más y el formato de 2 campos son incorrectos)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"title\": \"aaaaaaaaaaaa\",\r\n    \"category\": \"Varios\",\r\n    \"campoDeMas\": \"Cómo se dice tengolpor o telgopor? Tergonpor o tegolpor? me esta volviendo loco!!\",\r\n    \"thumbnails\": [\"https://fake-dir.com/fake-pic.png\", 25],\r\n    \"otroCampoDeMas\": \"torta de ricota\",\r\n    \"description\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\r\n    \"stock\": \"10\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/products",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "products"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Update",
+          "item": [
+            {
+              "name": "updateProduct (OK)",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"title\": \"Nombre del producto válido\",\r\n    \"price\": 55.55,\r\n    \"category\": \"Varios\",\r\n    \"thumbnails\": [\"https://fake-dir.com/fake-pic.png\", \"https://fake-dir.com/fake-pic2.png\"],\r\n    \"description\": \"Ésta es una descripción random para el producto.\",\r\n    \"stock\": 10,\r\n    \"status\": false\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/products/69d03f5b7859c657c5a2bc7b",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "products",
+                    "69d03f5b7859c657c5a2bc7b"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "updateProduct (OK 1 campo de más)",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"title\": \"Nombre del producto válido\",\r\n    \"price\": 55.55,\r\n    \"category\": \"Varios\",\r\n    \"thumbnails\": [\"https://fake-dir.com/fake-pic.png\", \"https://fake-dir.com/fake-pic2.png\"],\r\n    \"description\": \"Ésta es una descripción random para el producto.\",\r\n    \"stock\": 5,\r\n    \"unCampoDeMas\": \"torta de ricota\",\r\n    \"status\": false\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/products/69d03f5b7859c657c5a2bc7b",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "products",
+                    "69d03f5b7859c657c5a2bc7b"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "updateProduct (OK 2 campos de más)",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"title\": \"Nombre del producto válido\",\r\n    \"price\": 55.55,\r\n    \"category\": \"Varios\",\r\n    \"thumbnails\": [\"https://fake-dir.com/fake-pic.png\", \"https://fake-dir.com/fake-pic2.png\"],\r\n    \"otroCampoDeMas\": \"como es? mondiola o bondiola? mondiola o bondiola??\",\r\n    \"description\": \"Ésta es una descripción random para el producto.\",\r\n    \"stock\": 15,\r\n    \"unCampoDeMas\": \"torta de ricota\",\r\n    \"status\": false\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/products/69d03f5b7859c657c5a2bc7b",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "products",
+                    "69d03f5b7859c657c5a2bc7b"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "updateProduct (NOK falta 1 campo)",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"price\": 55.55,\r\n    \"category\": \"Varios\",\r\n    \"thumbnails\": [\"https://fake-dir.com/fake-pic.png\", \"https://fake-dir.com/fake-pic2.png\"],\r\n    \"description\": \"Ésta es una descripción random para el producto.\",\r\n    \"stock\": 10,\r\n    \"status\": false\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/products/69d03f5b7859c657c5a2bc7b",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "products",
+                    "69d03f5b7859c657c5a2bc7b"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "updateProduct (NOK faltan 2 campos)",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"price\": 55.55,\r\n    \"category\": \"Varios\",\r\n    \"thumbnails\": [\"https://fake-dir.com/fake-pic.png\", \"https://fake-dir.com/fake-pic2.png\"],\r\n    \"stock\": 10,\r\n    \"status\": false\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/products/69d03f5b7859c657c5a2bc7b",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "products",
+                    "69d03f5b7859c657c5a2bc7b"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "updateProduct (NOK falta 1 campo y hay 2 campos de más)",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"title\": \"Nombre del producto válido\",\r\n    \"category\": \"Varios\",\r\n    \"otroCampoDeMas\": \"como es? mondiola o bondiola? mondiola o bondiola??\",\r\n    \"thumbnails\": [\"https://fake-dir.com/fake-pic.png\", \"https://fake-dir.com/fake-pic2.png\"],\r\n    \"description\": \"Ésta es una descripción random para el producto.\",\r\n    \"stock\": 10,\r\n    \"unCampoDeMas\": \"torta de ricota\",\r\n    \"status\": false\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/products/69d03f5b7859c657c5a2bc7b",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "products",
+                    "69d03f5b7859c657c5a2bc7b"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "updateProduct (NOK formato de 2 campos incorrectos)",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"title\": \"Nombre del producto válido\",\r\n    \"price\": 55.55,\r\n    \"category\": 10,\r\n    \"thumbnails\": [\"https://fake-dir.com/fake-pic.png\", \"https://fake-dir.com/fake-pic2.png\"],\r\n    \"description\": \"Ésta es una descripción random para el producto.\",\r\n    \"stock\": 10,\r\n    \"status\": \"false\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/products/69d03f5b7859c657c5a2bc7b",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "products",
+                    "69d03f5b7859c657c5a2bc7b"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "updateProduct (NOK falta 1 campo, hay 2 campos de más y el formato de 2 campos son incorrectos)",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"category\": \"Varios\",\r\n    \"price\": 55.55,\r\n    \"otroCampoDeMas\": \"como es? mondiola o bondiola? mondiola o bondiola??\",\r\n    \"thumbnails\": [false, \"https://fake-dir.com/fake-pic2.png\"],\r\n    \"description\": \"Ésta es una descripción random para el producto.\",\r\n    \"stock\": 10,\r\n    \"unCampoDeMas\": \"torta de ricota\",\r\n    \"code\": 65,\r\n    \"status\": false\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/products/69d03f5b7859c657c5a2bc7b",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "products",
+                    "69d03f5b7859c657c5a2bc7b"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Delete",
+          "item": [
+            {
+              "name": "deleteProductById (OK)",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/products/69d14bb579a5b818c47d10cb",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "products",
+                    "69d14bb579a5b818c47d10cb"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "deleteProductById (NOK - producto no encontrado)",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/products/69d00cc3595eb0516d3032bf",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "products",
+                    "69d00cc3595eb0516d3032bf"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "deleteProductById (NOK - ID de producto con formato no válido)",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/products/9",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "products",
+                    "9"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "carts",
+      "item": [
+        {
+          "name": "GetAll",
+          "item": [
+            {
+              "name": "getAllCarts (DEFAULT)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/carts",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "carts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getAllCarts (PAGINADO + limit=5)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/carts?limit=5",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "carts"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "5"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getAllCarts (PAGINADO + limit=15)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/carts?limit=15",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "carts"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "15"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getAllCarts (PAGINADO + limit=5 + page=2)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/carts?limit=5&page=2",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "carts"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "5"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "GetById",
+          "item": [
+            {
+              "name": "getCartById (OK)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/carts/69d00ecd595eb0516d3032c6",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "carts",
+                    "69d00ecd595eb0516d3032c6"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getCartById (NOK carrito no encontrado)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/carts/69ced9fc9008912f29a15c94",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "carts",
+                    "69ced9fc9008912f29a15c94"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getCartById (NOK ID con mal formato)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/carts/6",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "carts",
+                    "6"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Create",
+          "item": [
+            {
+              "name": "createCart (OK)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\r\n  { \"productId\": \"6a58fcb677eb2866ad3cfd60\", \"quantity\": 2 },\r\n  { \"productId\": \"6a58fcc877eb2866ad3cfd62\", \"quantity\": 3 },\r\n  { \"productId\": \"6a58fcd177eb2866ad3cfd64\", \"quantity\": 1 }\r\n]\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/carts/",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "carts",
+                    ""
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "createCart (OK campos de más)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\r\n  { \"productId\": \"69ced9fc9008912f29a16c9e\", \"quantity\": 3, \"code\": \"1\"},\r\n  { \"productId\": \"69ced9fc9008912f29a16ca2\", \"quantity\": 1, \"title\": \"Otro título cualquiera\", \"code\": \"2\"}\r\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/carts",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "carts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "createCart (OK 2 productos repetidos)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\r\n  { \"productId\": \"69ced9fc9008912f29a16c9e\", \"quantity\": 2 },\r\n  { \"productId\": \"69ced9fc9008912f29a16ca2\", \"quantity\": 3 },\r\n  { \"productId\": \"69ced9fc9008912f29a16c9e\", \"quantity\": 1 }\r\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/carts",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "carts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "createCart (NOK body incorrecto)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"title\": \"aaaaaaaaaaaa\",\r\n    \"price\": 55.55,\r\n    \"category\": \"Varios\",\r\n    \"campoDeMas\": \"como es? mondiola o bondiola? mondiola o bondiola??\",\r\n    \"thumbnails\": [\"https://fake-dir.com/fake-pic.png\", \"https://fake-dir.com/fake-pic2.png\"],\r\n    \"description\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\r\n    \"otroCampoDeMas\": \"torta de ricota\",\r\n    \"stock\": 10\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/carts",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "carts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "createCart (NOK falta 1 campo)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\r\n  { \"productId\": \"69ced9fc9008912f29a16c9e\", \"quantity\": 2 },\r\n  { \"productId\": \"69ced9fc9008912f29a16ca2\", \"quantity\": 3 },\r\n  { \"productId\": \"69ced9fc9008912f29a16ca6\" }\r\n]\r\n",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/carts",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "carts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "createCart (NOK producto inexistente)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\r\n  { \"productId\": \"69ced9fc9007212f29a16ca2\", \"quantity\": 2 }\r\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/carts",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "carts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "createCart (NOK 1 producto incorrecto y 2 productos correctos)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\r\n  { \"productId\": \"69ced9fc9008912f29a16c9e\", \"quantity\": 2 },\r\n  { \"productId\": \"69ced9fc9008422f29a16ca2\", \"quantity\": 3 },\r\n  { \"productId\": \"69ced9fc9008912f29a16ca6\", \"quantity\": 1 }\r\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/carts",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "carts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "createCart (NOK formato de 2 campos incorrectos)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\r\n  { \"productId\": \"7c02ed6c-1ae6-402f-aed5-f36bf11b522e\", \"quantity\": \"2\" },\r\n  { \"productId\": \"c9a4f2e1-7d3b-4d8a-9f2b-1f4a6e2d9a11\", \"quantity\": \"3\" },\r\n  { \"productId\": \"7f3b2c44-1a9d-4e6f-8b2d-3c7f9d2a5b22\", \"quantity\": \"1\" }\r\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/carts",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "carts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "createCart (NOK falta 1 campo, hay 2 campos de más y el formato de 2 campos son incorrectos)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "[\r\n  { \"productId\": 6, \"quantity\": \"2\" },\r\n  { \"productId\": \"69ced9fc9008912f29a16ca2\" },\r\n  { \"productId\": \"69ced9fc9008912f29a16ca6\", \"quantity\": 1, \"unCampoDeMas\":\"algo\", \"otroCampoDeMas\": \"otro algo\" }\r\n]",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/carts",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "carts"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Update",
+          "item": [
+            {
+              "name": "addProductsByCartId (OK)",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"quantity\": 3\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/carts/69d00ecd595eb0516d3032c6/product/69ced9fc9008912f29a16c96",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "carts",
+                    "69d00ecd595eb0516d3032c6",
+                    "product",
+                    "69ced9fc9008912f29a16c96"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "addProductsByCartId (NOK - id de COMPRA inexistente y id de PRODUCTO existente)",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"quantity\": 3\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/carts/69ced9fc9002212f29a16c96/product/69ced9fc9008912f29a16c96",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "carts",
+                    "69ced9fc9002212f29a16c96",
+                    "product",
+                    "69ced9fc9008912f29a16c96"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "addProductsByCartId (NOK - id de COMPRA existente y id de PRODUCTO inexistente)",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"quantity\": 3\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/carts/69d00ecd595eb0516d3032c6/product/69d00ecd595eb0516d3032c6",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "carts",
+                    "69d00ecd595eb0516d3032c6",
+                    "product",
+                    "69d00ecd595eb0516d3032c6"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "addProductsByCartId (NOK - id de COMPRA (mal formato) y id de PRODUCTO existente)",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"quantity\": 3\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/carts/915825/product/69ced9fc9008912f29a16c96",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "carts",
+                    "915825",
+                    "product",
+                    "69ced9fc9008912f29a16c96"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "addProductsByCartId (NOK - id de COMPRA existente y id de PRODUCTO (mal formato))",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"quantity\": 3\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/carts/69d00ecd595eb0516d3032c6/product/915825",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "carts",
+                    "69d00ecd595eb0516d3032c6",
+                    "product",
+                    "915825"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "addProductsByCartId (NOK - id de COMPRA y id de PRODUCTO inexistente)",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"quantity\": 3\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/carts/6sced9fc9022212f29a16c96/product/69c4d9fc9002212f29a16c96",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "carts",
+                    "6sced9fc9022212f29a16c96",
+                    "product",
+                    "69c4d9fc9002212f29a16c96"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getProductsByCartId (NOK ids OK, NO body)",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/carts/69d00ecd595eb0516d3032c6/product/69ced9fc9008912f29a16c96",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "carts",
+                    "69d00ecd595eb0516d3032c6",
+                    "product",
+                    "69ced9fc9008912f29a16c96"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "web_sockets",
+      "item": [
+        {
+          "name": "RealTimeProductsView",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/realtimeproducts",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "realtimeproducts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "HomeView",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "badURL",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/products",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "products"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
