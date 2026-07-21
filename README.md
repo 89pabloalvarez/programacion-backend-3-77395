@@ -2,11 +2,3 @@
 
 # ¡¡SETUP!!
 
-Se precisa crear el archivo ".env" con los siguientes datos dentro:
-
-MONGO_USER=89pabloalvarez_db_user
-MONGO_PASS=30dZQjsIE1WwdQAS
-MONGO_CLUSTER=yaopdxg.mongodb.net
-MONGO_DB_NAME=db
-MONGO_SHARD=wavnkld-shard
-MONGO_ATLAS_SHARD=hjalau-shard
