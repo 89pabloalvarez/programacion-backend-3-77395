@@ -48,6 +48,12 @@ class UsersService {
       CONST.USER_FIELDS_SCHEMA
     )
 
+    if (!body.password || typeof body.password !== "string") {
+        const err = new Error(CONST.USER_CREATE_NOT_PASSWORD)
+        err.statusCode = 400
+        throw err
+    }
+
     if (!isBodyValid.objectValid) {
       const err = new Error('Validación fallida')
       err.statusCode = 400

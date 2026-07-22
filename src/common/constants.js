@@ -8,6 +8,7 @@ export const CONSTANTS = Object.freeze({
     USER_NOT_FOUND: 'Usuario no encontrado',
     PRODUCT_NOT_FOUND: 'Producto no encontrado.',
     PURCHASE_NOT_FOUND: 'Compra no encontrada.',
+    USER_CREATE_NOT_PASSWORD: 'Se debe ingresar una contraseña al crear un usuario.',
     BAD_ID: 'El ID no tiene formato válido.',
     SERVER_ERROR: 'Error interno del servidor.',
     PRODUCT_CREATE_MUST_BE_ARRAY: 'El body debe ser un array.',
@@ -52,6 +53,7 @@ export const CONSTANTS = Object.freeze({
         "name",
         "last_name",
         "email",
+        "password",
         "status",
         "role"
     ],
@@ -65,6 +67,7 @@ export const CONSTANTS = Object.freeze({
         name: "string",
         last_name: "string",
         email: "string",
+        password: "string",
         status: "boolean",
         role: "array:string"
     }
