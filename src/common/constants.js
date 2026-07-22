@@ -4,6 +4,8 @@ export const CONSTANTS = Object.freeze({
     DIR_URL_ROOT: '/api',
     DIR_URL_PRODUCTS: '/products',
     DIR_URL_CARTS: '/carts',
+    DIR_URL_USERS: '/users',
+    USER_NOT_FOUND: 'Usuario no encontrado',
     PRODUCT_NOT_FOUND: 'Producto no encontrado.',
     PURCHASE_NOT_FOUND: 'Compra no encontrada.',
     BAD_ID: 'El ID no tiene formato válido.',
@@ -45,5 +47,25 @@ export const CONSTANTS = Object.freeze({
     CART_FIELDS_SCHEMA: {
         productId: "string",
         quantity: "number"
+    },
+    USER_CREATE_ALLOWED_FIELDS: [
+        "name",
+        "last_name",
+        "email",
+        "status",
+        "role"
+    ],
+    USER_EDIT_ALLOWED_FIELDS: [
+        "name",
+        "last_name",
+        "status",
+        "role"
+    ],
+    USER_FIELDS_SCHEMA: {
+        name: "string",
+        last_name: "string",
+        email: "string",
+        status: "boolean",
+        role: "array:string"
     }
 })
