@@ -72,9 +72,20 @@ export const CONSTANTS = Object.freeze({
         status: "boolean",
         role: "array:string"
     },
-    ROLES: [
+    USER_ROLES: [
         'admin',
         'user',
         'seller'
+    ],
+    ORDER_STATES: [
+        'pending',
+        'confirmed',
+        'shipped',
+        'delivered'
+    ],
+    ORDER_PRIORITIES: [
+        'low',
+        'medium',
+        'high'
     ]
 })

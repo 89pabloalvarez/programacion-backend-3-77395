@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose'
 import mongoosePaginate from 'mongoose-paginate-v2'
+import { CONSTANTS as CONST } from '../common/constants.js'
 
 const CartSchema = new Schema({
   products: [
@@ -15,10 +16,19 @@ const CartSchema = new Schema({
         default: 1
       }
     }
-  ]
+  ],
+  state: {
+    type: String,
+    enum: CONST.ORDER_STATES,
+    default: 'pending'
+  },
+  priority: {
+    type: String,
+    enum: CONST.ORDER_PRIORITIES,
+    default: 'medium'
+  }
 })
 
-// Populate automático en todas las queries de lectura
 CartSchema.pre('find', function () {
   this.populate({
     path: 'products.product',
