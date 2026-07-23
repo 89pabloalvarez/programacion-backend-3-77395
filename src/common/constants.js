@@ -2,10 +2,15 @@ export const CONSTANTS = Object.freeze({
     PORT: 8080,
     BASEURL: `http://localhost:8080`,
     DIR_URL_ROOT: '/api',
+    DIR_URL_MOCKS: '/mocks',
     DIR_URL_PRODUCTS: '/products',
     DIR_URL_CARTS: '/carts',
+    DIR_URL_USERS: '/users',
+    DIR_URL_DELIVERY: '/delivery',
+    USER_NOT_FOUND: 'Usuario no encontrado',
     PRODUCT_NOT_FOUND: 'Producto no encontrado.',
     PURCHASE_NOT_FOUND: 'Compra no encontrada.',
+    USER_CREATE_NOT_PASSWORD: 'Se debe ingresar una contraseña al crear un usuario.',
     BAD_ID: 'El ID no tiene formato válido.',
     SERVER_ERROR: 'Error interno del servidor.',
     PRODUCT_CREATE_MUST_BE_ARRAY: 'El body debe ser un array.',
@@ -45,5 +50,44 @@ export const CONSTANTS = Object.freeze({
     CART_FIELDS_SCHEMA: {
         productId: "string",
         quantity: "number"
-    }
+    },
+    USER_CREATE_ALLOWED_FIELDS: [
+        "name",
+        "last_name",
+        "email",
+        "password",
+        "status",
+        "role"
+    ],
+    USER_EDIT_ALLOWED_FIELDS: [
+        "name",
+        "last_name",
+        "status",
+        "role"
+    ],
+    USER_FIELDS_SCHEMA: {
+        name: "string",
+        last_name: "string",
+        email: "string",
+        password: "string",
+        status: "boolean",
+        role: "array:string"
+    },
+    USER_ROLES: [
+        'admin',
+        'user',
+        'seller',
+        'dealer'
+    ],
+    ORDER_STATES: [
+        'pending',
+        'confirmed',
+        'shipped',
+        'delivered'
+    ],
+    ORDER_PRIORITIES: [
+        'low',
+        'medium',
+        'high'
+    ]
 })
