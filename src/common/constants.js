@@ -6,6 +6,7 @@ export const CONSTANTS = Object.freeze({
     DIR_URL_PRODUCTS: '/products',
     DIR_URL_CARTS: '/carts',
     DIR_URL_USERS: '/users',
+    DIR_URL_DELIVERY: '/delivery',
     USER_NOT_FOUND: 'Usuario no encontrado',
     PRODUCT_NOT_FOUND: 'Producto no encontrado.',
     PURCHASE_NOT_FOUND: 'Compra no encontrada.',
