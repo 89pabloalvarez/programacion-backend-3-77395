@@ -1456,19 +1456,1175 @@
       ]
     },
     {
+      "name": "users",
+      "item": [
+        {
+          "name": "GetAll",
+          "item": [
+            {
+              "name": "getAllUsers (DEFAULT)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/users",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getAllUsers (PAGINADO + limit=5)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/users?limit=5",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "5"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getAllUsers (PAGINADO + limit=5 + page=2)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/users?limit=5&page=2",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "5"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getAllUsers (PAGINADO + limit=15)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/users?limit=15",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "15"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "GetById",
+          "item": [
+            {
+              "name": "getUserById (OK)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/users/6a60ea3b78921b6dd4680b1c",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users",
+                    "6a60ea3b78921b6dd4680b1c"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getUserById (NOK usuario no encontrado)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/users/69ced9fc9008912f29a15c94",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users",
+                    "69ced9fc9008912f29a15c94"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getUserById (NOK ID con mal formato)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/users/6",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users",
+                    "6"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Create",
+          "item": [
+            {
+              "name": "createUser (OK)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Juan\",\r\n  \"last_name\": \"Pérez\",\r\n  \"email\": \"juan.perez@example.com\",\r\n  \"password\": \"123456\",\r\n  \"status\": true,\r\n  \"role\": [\"admin\", \"editor\"]\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/users",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "createUser (OK 1 campo de más)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Juan\",\r\n  \"last_name\": \"Pérez\",\r\n  \"email\": \"juan.perez@example.com\",\r\n  \"password\": \"123456\",\r\n  \"status\": true,\r\n  \"role\": [\"admin\"],\r\n  \"extra\": \"valor_innecesario\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/users",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "createUser (OK 2 campos de más)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Juan\",\r\n  \"last_name\": \"Pérez\",\r\n  \"email\": \"juan.perez@example.com\",\r\n  \"password\": \"123456\",\r\n  \"status\": true,\r\n  \"role\": [\"admin\"],\r\n  \"extra1\": \"dato1\",\r\n  \"extra2\": \"dato2\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/users",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "createUser (NOK falta 1 campo - \"Password\")",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Juan\",\r\n  \"last_name\": \"Pérez\",\r\n  \"email\": \"juan.perez@example.com\",\r\n  \"status\": true,\r\n  \"role\": [\"admin\"]\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/users",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "createUser (NOK faltan 2 campos)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Juan\",\r\n  \"password\": \"123456\",\r\n  \"status\": true,\r\n  \"role\": [\"admin\"]\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/users",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "createUser (NOK falta 1 campo y hay 2 campos de más)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Juan\",\r\n  \"last_name\": \"Pérez\",\r\n  \"password\": \"123456789\",\r\n  \"status\": true,\r\n  \"role\": [\"admin\"],\r\n  \"extra1\": \"dato1\",\r\n  \"extra2\": \"dato2\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/users",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "createUser (NOK formato de 2 campos incorrectos)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Juan\",\r\n  \"last_name\": \"Pérez\",\r\n  \"email\": \"juan.perez@example.com\",\r\n  \"password\": \"123456\",\r\n  \"status\": \"true\",\r\n  \"role\": \"admin\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/users",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "createUser (NOK falta 1 campo, hay 2 campos de más y el formato de 2 campos son incorrectos)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Juan\",\r\n  \"last_name\": \"Pérez\",\r\n  \"password\": \"123456789\",\r\n  \"status\": \"true\",\r\n  \"role\": \"admin\",\r\n  \"extra1\": \"dato1\",\r\n  \"extra2\": \"dato2\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/users",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Update",
+          "item": [
+            {
+              "name": "updateUser (OK)",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Juan\",\r\n  \"last_name\": \"Pérez\",\r\n  \"status\": false,\r\n  \"role\": [\"editor\", \"moderator\"]\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/users/6a60ea5978921b6dd4680b1d",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users",
+                    "6a60ea5978921b6dd4680b1d"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "updateUser (OK 1 campo de más)",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Juan\",\r\n  \"last_name\": \"Pérez\",\r\n  \"status\": true,\r\n  \"role\": [\"admin\"],\r\n  \"extra\": \"valor_innecesario\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/users/6a60ea5978921b6dd4680b1d",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users",
+                    "6a60ea5978921b6dd4680b1d"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "updateUser (OK 2 campos de más)",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Juan\",\r\n  \"last_name\": \"Pérez\",\r\n  \"status\": true,\r\n  \"role\": [\"admin\"],\r\n  \"extra1\": \"dato1\",\r\n  \"extra2\": \"dato2\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/users/6a60ea5978921b6dd4680b1d",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users",
+                    "6a60ea5978921b6dd4680b1d"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "updateUser (NOK falta 1 campo)",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Juan\",\r\n  \"last_name\": \"Pérez\",\r\n  \"status\": true\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/users/6a60ea5978921b6dd4680b1d",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users",
+                    "6a60ea5978921b6dd4680b1d"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "updateUser (NOK faltan 2 campos)",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Juan\",\r\n  \"last_name\": \"Pérez\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/users/6a60ea5978921b6dd4680b1d",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users",
+                    "6a60ea5978921b6dd4680b1d"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "updateUser (NOK falta 1 campo y hay 2 campos de más)",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Juan\",\r\n  \"last_name\": \"Pérez\",\r\n  \"status\": true,\r\n  \"extra1\": \"dato1\",\r\n  \"extra2\": \"dato2\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/users/6a60ea5978921b6dd4680b1d",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users",
+                    "6a60ea5978921b6dd4680b1d"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "updateUser (NOK formato de 2 campos incorrectos)",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Juan\",\r\n  \"last_name\": \"Pérez\",\r\n  \"status\": \"true\",\r\n  \"role\": \"admin\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/users/6a60ea5978921b6dd4680b1d",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users",
+                    "6a60ea5978921b6dd4680b1d"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "updateUser (NOK falta 1 campo, hay 2 campos de más y el formato de 2 campos son incorrectos)",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Juan\",\r\n  \"last_name\": false,\r\n  \"status\": \"false\",\r\n  \"extra1\": \"dato1\",\r\n  \"extra2\": \"dato2\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/users/6a60ea5978921b6dd4680b1d",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users",
+                    "6a60ea5978921b6dd4680b1d"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Delete",
+          "item": [
+            {
+              "name": "deleteUserById (OK)",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/users/6a60ee1578921b6dd4680b20",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users",
+                    "6a60ee1578921b6dd4680b20"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "deleteUserById (NOK - usuario no encontrado)",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/users/69d00cc3595eb0516d3032bf",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users",
+                    "69d00cc3595eb0516d3032bf"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "deleteUserById (NOK - ID de usuario con formato no válido)",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/users/9",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users",
+                    "9"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "mocks",
+      "item": [
+        {
+          "name": "users",
+          "item": [
+            {
+              "name": "getUsers (SIN quantity; default = 10)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/mocks/users/get",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "mocks",
+                    "users",
+                    "get"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getUsers (quantity = 5)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/mocks/users/get?quantity=5",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "mocks",
+                    "users",
+                    "get"
+                  ],
+                  "query": [
+                    {
+                      "key": "quantity",
+                      "value": "5",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "insertUsers (SIN quantity; default = 10)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/mocks/users/insert",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "mocks",
+                    "users",
+                    "insert"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "insertUsers (quantity = 5)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/mocks/users/insert?quantity=5",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "mocks",
+                    "users",
+                    "insert"
+                  ],
+                  "query": [
+                    {
+                      "key": "quantity",
+                      "value": "5"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "products",
+          "item": [
+            {
+              "name": "getProducts (SIN quantity; default = 10)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/mocks/products/get",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "mocks",
+                    "products",
+                    "get"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getProducts (quantity = 5)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/mocks/products/get?quantity=5",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "mocks",
+                    "products",
+                    "get"
+                  ],
+                  "query": [
+                    {
+                      "key": "quantity",
+                      "value": "5"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "insertProducts (SIN quantity; default = 10)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/mocks/products/insert",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "mocks",
+                    "products",
+                    "insert"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "insertProducts (quantity = 5)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/mocks/products/insert?quantity=5",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "mocks",
+                    "products",
+                    "insert"
+                  ],
+                  "query": [
+                    {
+                      "key": "quantity",
+                      "value": "5"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "carts",
+          "item": [
+            {
+              "name": "getCarts (SIN quantity; default = 10)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/mocks/carts/get",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "mocks",
+                    "carts",
+                    "get"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getCarts (quantity = 5)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/mocks/carts/get?quantity=5",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "mocks",
+                    "carts",
+                    "get"
+                  ],
+                  "query": [
+                    {
+                      "key": "quantity",
+                      "value": "5"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "insertCarts (SIN quantity; default = 10)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/mocks/carts/insert",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "mocks",
+                    "carts",
+                    "insert"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "insertCarts (quantity = 5)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/mocks/carts/insert?quantity=5",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "mocks",
+                    "carts",
+                    "insert"
+                  ],
+                  "query": [
+                    {
+                      "key": "quantity",
+                      "value": "5"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "delivery",
+          "item": [
+            {
+              "name": "getDelivery (SIN quantity; default = 10)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/mocks/delivery/get",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "mocks",
+                    "delivery",
+                    "get"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getDelivery (quantity = 5)",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/mocks/delivery/get?quantity=5",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "mocks",
+                    "delivery",
+                    "get"
+                  ],
+                  "query": [
+                    {
+                      "key": "quantity",
+                      "value": "5"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "insertDelivery (SIN quantity; default = 10)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/mocks/delivery/insert",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "mocks",
+                    "delivery",
+                    "insert"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "insertDelivery (quantity = 5)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "http://localhost:8080/api/mocks/delivery/insert?quantity=5",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "mocks",
+                    "delivery",
+                    "insert"
+                  ],
+                  "query": [
+                    {
+                      "key": "quantity",
+                      "value": "5"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "badURL",
       "request": {
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://localhost:8080/products",
+          "raw": "http://localhost:8080/users",
           "protocol": "http",
           "host": [
             "localhost"
           ],
           "port": "8080",
           "path": [
-            "products"
+            "users"
           ]
         }
       },
