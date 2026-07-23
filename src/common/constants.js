@@ -2,6 +2,7 @@ export const CONSTANTS = Object.freeze({
     PORT: 8080,
     BASEURL: `http://localhost:8080`,
     DIR_URL_ROOT: '/api',
+    DIR_URL_MOCKS: '/mocks',
     DIR_URL_PRODUCTS: '/products',
     DIR_URL_CARTS: '/carts',
     DIR_URL_USERS: '/users',
@@ -70,5 +71,10 @@ export const CONSTANTS = Object.freeze({
         password: "string",
         status: "boolean",
         role: "array:string"
-    }
+    },
+    ROLES: [
+        'admin',
+        'user',
+        'seller'
+    ]
 })

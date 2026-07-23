@@ -13,7 +13,7 @@ router.get('/:id', usersController.getById)
 router.post('/', usersController.create)
 
 // Actualizar un usuario.
-router.put('/:id', usersController.update)
+router.patch('/:id', usersController.update)
 
 // Eliminar un usuario.
 router.delete('/:id', usersController.delete)
