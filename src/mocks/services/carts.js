@@ -10,7 +10,8 @@ export function generateMockCarts(quantity = 10) {
       quantity: faker.number.int({ min: 1, max: 5 })
     })),
     state: faker.helpers.arrayElement(CONST.ORDER_STATES),
-    priority: faker.helpers.arrayElement(CONST.ORDER_PRIORITIES)
+    priority: faker.helpers.arrayElement(CONST.ORDER_PRIORITIES),
+    user: faker.database.mongodbObjectId()
   }))
 }
 
@@ -24,7 +25,8 @@ export async function saveMockCarts(quantity = 10) {
       quantity: faker.number.int({ min: 1, max: 5 })
     })),
     state: faker.helpers.arrayElement(CONST.ORDER_STATES),
-    priority: faker.helpers.arrayElement(CONST.ORDER_PRIORITIES)
+    priority: faker.helpers.arrayElement(CONST.ORDER_PRIORITIES),
+    user: faker.database.mongodbObjectId()
   }))
 
   return await CartModel.insertMany(carts)

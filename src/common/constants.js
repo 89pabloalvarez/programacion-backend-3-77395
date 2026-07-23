@@ -75,7 +75,8 @@ export const CONSTANTS = Object.freeze({
     USER_ROLES: [
         'admin',
         'user',
-        'seller'
+        'seller',
+        'dealer'
     ],
     ORDER_STATES: [
         'pending',
