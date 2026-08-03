@@ -53,7 +53,7 @@ class ProductsService {
       throw new DomainError('VALIDATION_FAILED', isBodyValid)
     }
 
-    return await this.productsRepository.create(body)
+    return await this.productsRepo.create(body)
   }
 
   // Actualiza un producto.
@@ -72,12 +72,12 @@ class ProductsService {
       throw new DomainError('VALIDATION_FAILED', isBodyValid)
     }
 
-    return await this.productsRepository.update(id, data)
+    return await this.productsRepo.update(id, data)
   }
 
   // Eliminar un producto.
   async delete(id) {
-    const product = await this.productsRepository.delete(id)
+    const product = await this.productsRepo.delete(id)
     if (!product) {
       throw new DomainError('PRODUCT_NOT_FOUND', { searchedProduct: id, message: CONST.PRODUCT_NOT_FOUND })
     }
