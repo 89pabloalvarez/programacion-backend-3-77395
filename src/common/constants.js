@@ -17,6 +17,10 @@ export const CONSTANTS = Object.freeze({
     REQUEST_NOT_COMPLETE: 'Solicitud incompleta.',
     QUANTITY_NOT_DEFINED: 'No se encontró el campo "quantity" en el cuerpo de la solicitud.',
     QUANTITY_INVALID_VALUE: 'Cantidad no válida.',
+    VALIDATION_FAILED: 'Validación fallida.',
+    MOCK_QUANTITY_INVALID: 'Cantidad de mocks inválida.',
+    MOCK_INSERT_FAILED: 'Error al guardar los mocks en la base de datos.',
+    MOCKS_NO_PRODUCTS: 'No hay productos disponibles para generar carritos mock.',
     PRODUCT_CREATE_ALLOWED_FIELDS: [
         "title",
         "price",
