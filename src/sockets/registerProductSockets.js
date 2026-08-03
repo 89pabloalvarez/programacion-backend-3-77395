@@ -1,8 +1,9 @@
 import { productsService } from '../services/products.js'
+import logger from '../config/logger.js'
 
 export default function registerProductSockets(io) {
   io.on('connection', async (socket) => {
-    console.log(`Usuario conectado: ${socket.id}`)
+    logger.info('Usuario conectado al socket', { socketId: socket.id })
 
     let socketPage = 1
     let socketLimit = 10
@@ -65,7 +66,7 @@ export default function registerProductSockets(io) {
     })
 
     socket.on('disconnect', () => {
-      console.log(`Usuario desconectado: ${socket.id}`)
+      logger.info('Usuario desconectado del socket', { socketId: socket.id })
     })
   })
 }
