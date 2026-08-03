@@ -1,8 +1,15 @@
-import { faker } from '@faker-js/faker'
+﻿import { faker } from '@faker-js/faker'
 import { ProductModel } from '../../models/product.js'
+import { DomainError } from '../../common/errors.js'
+import { validateMockQuantity } from '../../common/functions.js'
 
 export function generateMockProducts(quantity = 10) {
-  return Array.from({ length: quantity }, () => ({
+  const parsed = validateMockQuantity(quantity)
+  if (!parsed.valid) {
+    throw new DomainError('MOCK_QUANTITY_INVALID', { provided: quantity })
+  }
+
+  return Array.from({ length: parsed.value }, () => ({
     title: faker.commerce.productName(),
     description: faker.commerce.productDescription(),
     price: parseFloat(faker.commerce.price()),
@@ -17,5 +24,9 @@ export function generateMockProducts(quantity = 10) {
 }
 
 export async function saveMockProducts(products) {
-  return await ProductModel.insertMany(products)
+  try {
+    return await ProductModel.insertMany(products)
+  } catch (error) {
+    throw new DomainError('MOCK_INSERT_FAILED', { originalError: error.message })
+  }
 }
