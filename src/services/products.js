@@ -1,4 +1,5 @@
 import { CONSTANTS as CONST } from '../common/constants.js'
+import { DomainError } from '../common/errors.js'
 import { validateFields } from '../common/functions.js'
 import { productsRepository } from '../repositories/products.js'
 import mongoose from 'mongoose'
@@ -12,11 +13,9 @@ class ProductsService {
   async getAll({ limit = 10, page = 1, sort, query }) {
     let filter = {}
     if (query) {
-      // Buscar por disponibilidad: "true" o "false"
       if (query === 'true' || query === 'false') {
         filter = { status: query === 'true' }
       } else {
-        // Buscar por categoría (case-insensitive)
         filter = { category: { $regex: query, $options: 'i' } }
       }
     }
@@ -33,17 +32,11 @@ class ProductsService {
   // Obtener un producto por ID.
   async getById(id) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      const err = new Error(CONST.BAD_ID)
-      err.statusCode = 400
-      err.details = { providedId: id, message: CONST.BAD_ID }
-      throw err
+      throw new DomainError('BAD_ID', { providedId: id, message: CONST.BAD_ID })
     }
     const product = await this.productsRepo.getById(id)
     if (!product) {
-      const err = new Error(CONST.PRODUCT_NOT_FOUND)
-      err.statusCode = 404
-      err.details = { searchedProduct: id, message: CONST.PRODUCT_NOT_FOUND }
-      throw err
+      throw new DomainError('PRODUCT_NOT_FOUND', { searchedProduct: id, message: CONST.PRODUCT_NOT_FOUND })
     }
     return product
   }
@@ -57,22 +50,16 @@ class ProductsService {
     )
 
     if (!isBodyValid.objectValid) {
-      const err = new Error('Validación fallida')
-      err.statusCode = 400
-      err.details = isBodyValid
-      throw err
+      throw new DomainError('VALIDATION_FAILED', isBodyValid)
     }
 
-    return await this.productsRepo.create(body)
+    return await this.productsRepository.create(body)
   }
 
   // Actualiza un producto.
   async update(id, data) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
-      const err = new Error(CONST.BAD_ID)
-      err.statusCode = 400
-      err.details = { providedId: id, message: CONST.BAD_ID }
-      throw err
+      throw new DomainError('BAD_ID', { providedId: id, message: CONST.BAD_ID })
     }
 
     const isBodyValid = validateFields(
@@ -82,22 +69,17 @@ class ProductsService {
     )
 
     if (!isBodyValid.objectValid) {
-      const err = new Error('Validación fallida')
-      err.statusCode = 400
-      err.details = isBodyValid
-      throw err
+      throw new DomainError('VALIDATION_FAILED', isBodyValid)
     }
 
-    return await this.productsRepo.update(id, data)
+    return await this.productsRepository.update(id, data)
   }
 
   // Eliminar un producto.
   async delete(id) {
-    const product = await this.productsRepo.delete(id)
+    const product = await this.productsRepository.delete(id)
     if (!product) {
-      const err = new Error(CONST.PRODUCT_NOT_FOUND)
-      err.details = { searchedProduct: id, message: CONST.PRODUCT_NOT_FOUND }
-      throw err
+      throw new DomainError('PRODUCT_NOT_FOUND', { searchedProduct: id, message: CONST.PRODUCT_NOT_FOUND })
     }
     return product
   }
