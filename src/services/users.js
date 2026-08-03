@@ -3,6 +3,7 @@ import { DomainError } from '../common/errors.js'
 import { validateFields } from '../common/functions.js'
 import { usersRepository } from '../repositories/users.js'
 import mongoose from 'mongoose'
+import logger from '../config/logger.js'
 
 class UsersService {
   constructor(usersRepo) {
@@ -50,7 +51,9 @@ class UsersService {
       throw new DomainError('VALIDATION_FAILED', isBodyValid)
     }
 
-    return await this.usersRepo.create(body)
+    const createdUser = await this.usersRepo.create(body)
+    logger.info('Usuario creado correctamente', { userId: createdUser._id })
+    return createdUser
   }
 
   // Actualiza un usuario.
