@@ -1,6 +1,7 @@
 ﻿import { generateMockProducts, saveMockProducts } from '../services/products.js'
 import { validateMockQuantity } from '../../common/functions.js'
 import { DomainError } from '../../common/errors.js'
+import logger from '../../config/logger.js'
 
 export async function getMockProducts(req, res, next) {
   try {

@@ -1,6 +1,7 @@
 ﻿import { generateMockUsers, saveMockUsers } from '../services/users.js'
 import { validateMockQuantity } from '../../common/functions.js'
 import { DomainError } from '../../common/errors.js'
+import logger from '../../config/logger.js'
 
 export async function getMockUsers(req, res, next) {
   try {
