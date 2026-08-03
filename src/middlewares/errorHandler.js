@@ -3,6 +3,12 @@ import { ERROR_DICTIONARY } from '../common/errors.js'
 import logger from '../config/logger.js'
 
 export const errorHandler = (err, req, res, next) => {
+  if (err.statusCode === 404 || err.code === 'ROUTE_NOT_FOUND') {
+    err.statusCode = err.statusCode || ERROR_DICTIONARY.ROUTE_NOT_FOUND.statusCode
+    err.code = err.code || ERROR_DICTIONARY.ROUTE_NOT_FOUND.code
+    err.message = err.message || ERROR_DICTIONARY.ROUTE_NOT_FOUND.message
+  }
+
   if (err.name === 'ValidationError') {
     err.statusCode = 400
     err.code = 'VALIDATION_FAILED'
