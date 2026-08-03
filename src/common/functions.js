@@ -1,16 +1,17 @@
 import { CONSTANTS as CONST } from './constants.js'
+import logger from '../config/logger.js'
 
 export const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
 export async function startupServer(BASEURL) {
     await sleep(100)
-    console.log(`Iniciando servidor en 3..`)
+    logger.info('Iniciando servidor en 3..')
     await sleep(500)
-    console.log(`Iniciando servidor en 2..`)
+    logger.info('Iniciando servidor en 2..')
     await sleep(500)
-    console.log(`Iniciando servidor en 1..`)
+    logger.info('Iniciando servidor en 1..')
     await sleep(500)
-    console.log(`Servidor iniciado en: ${BASEURL}`)
+    logger.info(`Servidor iniciado en: ${BASEURL}`)
 }
 
 export function validateFields(objeto, allowedFields, schemaFields) {
