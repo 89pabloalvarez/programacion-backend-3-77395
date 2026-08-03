@@ -99,6 +99,19 @@ export function validateQuantity(item) {
   return null
 }
 
+export function validateMockQuantity(quantity) {
+  if (quantity === undefined || quantity === null || quantity === '') {
+    return { valid: true, value: 10 }
+  }
+
+  const parsed = Number(quantity)
+  if (!Number.isInteger(parsed) || parsed <= 0) {
+    return { valid: false, provided: quantity }
+  }
+
+  return { valid: true, value: parsed }
+}
+
 export function addOrUpdateCartProduct(productsMap, product, quantity) {
   if (!productsMap[product._id]) {
     productsMap[product._id] = { product: product._id, quantity }

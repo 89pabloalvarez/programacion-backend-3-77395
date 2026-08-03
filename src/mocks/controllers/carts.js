@@ -1,13 +1,31 @@
-import { generateMockCarts, saveMockCarts } from '../services/carts.js'
+﻿import { generateMockCarts, saveMockCarts } from '../services/carts.js'
+import { validateMockQuantity } from '../../common/functions.js'
+import { DomainError } from '../../common/errors.js'
 
-export async function getMockCarts(req, res) {
-  const quantity = parseInt(req.query.quantity) || 10
-  const carts = generateMockCarts(quantity)
-  res.json(carts)
+export async function getMockCarts(req, res, next) {
+  try {
+    const parsed = validateMockQuantity(req.query.quantity)
+    if (!parsed.valid) {
+      throw new DomainError('MOCK_QUANTITY_INVALID', { provided: req.query.quantity })
+    }
+
+    const carts = generateMockCarts(parsed.value)
+    res.json(carts)
+  } catch (error) {
+    next(error)
+  }
 }
 
-export async function insertMockCarts(req, res) {
-  const quantity = parseInt(req.query.quantity) || 10
-  const inserted = await saveMockCarts(quantity)
-  res.json({ insertedCount: inserted.length })
+export async function insertMockCarts(req, res, next) {
+  try {
+    const parsed = validateMockQuantity(req.query.quantity)
+    if (!parsed.valid) {
+      throw new DomainError('MOCK_QUANTITY_INVALID', { provided: req.query.quantity })
+    }
+
+    const inserted = await saveMockCarts(parsed.value)
+    res.json({ insertedCount: inserted.length })
+  } catch (error) {
+    next(error)
+  }
 }

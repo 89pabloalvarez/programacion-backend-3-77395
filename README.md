@@ -1,103 +1,159 @@
-# Proyecto Backend 3 - comisión 77395 - Products & Carts API
+# ShipNow API — Backend 3 - Comisión 77395
 
-# ShipNow API — Módulo de Mocking
+API de backend para un módulo de mocking que genera datos falsos y permite insertarlos en MongoDB.
 
-Este módulo agrega endpoints bajo `/api/mocks` para generar datos simulados (usuarios, productos, carritos/pedidos y entregas) y, opcionalmente, insertarlos en MongoDB como registros de prueba.  
-El objetivo es facilitar el desarrollo y las pruebas sin depender de datos reales cargados a mano.
+## 📌 Descripción
 
----
+Este proyecto expone:
+- APIs de productos, carritos y usuarios
+- APIs de mocks en `/api/mocks` para generar datos de prueba
+- vistas manejadas con Handlebars en `/` y `/realtimeproducts`
+- manejo de errores centralizado con `DomainError` y middleware global
 
-## 🚀 Endpoints disponibles
+## 🚀 Instalación
 
-### 1. Usuarios
-- **GET /api/mocks/users?quantity=N**  
-  Devuelve `N` usuarios simulados (por defecto 10 si no se pasa `quantity`).  
-  Cada usuario incluye:
-  - `name`, `last_name`
-  - `email`, `password`
-  - `status` (booleano)
-  - `role` (array con un rol válido de `CONST.USER_ROLES`)
+```bash
+npm install
+```
 
-- **POST /api/mocks/users?quantity=N**  
-  Inserta `N` usuarios simulados en la colección `users` de MongoDB.  
-  Responde con `{ insertedCount: N }`.
+## 📦 Variables de entorno
 
----
+Crea un archivo `.env` en la raíz con estas variables:
 
-### 2. Productos
-- **GET /api/mocks/products?quantity=N**  
-  Devuelve `N` productos simulados (por defecto 10).  
-  Cada producto incluye:
-  - `title`, `description`
-  - `price`, `category`
-  - `stock` (unidades de productos como número entero)
-  - `thumbnails` (array de URLs de imágenes falsas)
-  - `status` (booleano)
+```env
+MONGO_USER=<usuario>
+MONGO_PASS=<contraseña>
+MONGO_SHARD=<shard>
+MONGO_CLUSTER=<cluster>
+MONGO_ATLAS_SHARD=<atlas-shard>
+MONGO_DB_NAME=<nombre-de-la-base>
+```
 
-- **POST /api/mocks/products?quantity=N**  
-  Inserta `N` productos simulados en la colección `products`.  
-  Responde con `{ insertedCount: N }`.
+## ▶️ Comandos
 
----
+```bash
+npm start
+```
 
-### 3. Carritos / Pedidos
-- **GET /api/mocks/carts?quantity=N**  
-  Devuelve `N` carritos simulados (por defecto 10).  
-  Cada carrito incluye:
-  - `products`: lista de productos con `ObjectId` falso y cantidad
-  - `state`: uno de `pending`, `confirmed`, `shipped`, `delivered`
-  - `priority`: uno de `low`, `medium`, `high`
-  - `user`: referencia a un usuario (inventado en el mock o real en DB)
+> El servidor arranca en `http://localhost:8080` y monta los endpoints bajo `/api`.
 
-- **POST /api/mocks/carts?quantity=N**  
-  Inserta `N` carritos en la colección `carts`.  
-  Los productos referencian a `_id` reales de la colección `products`.  
-  Responde con `{ insertedCount: N }`.
+## 🌐 Rutas principales
 
----
+### Rutas de vistas
+- `GET /` — lista de productos con paginación
+- `GET /cart/:cid` — detalle de carrito por ID
 
-### 4. Entregas
-- **GET /api/mocks/delivery/get?quantity=N**  
-  Devuelve `N` entregas simuladas (por defecto 10).  
-  Cada entrega incluye:
-  - `order`: referencia a un pedido/carrito (ObjectId falso)
-  - `deliveryMan`: objeto con datos inventados de un usuario con rol `"dealer"` (repartidor)
-  - `date`: fecha reciente generada con faker  
+### Rutas API core
+- `GET /api/products`
+- `GET /api/products/:id`
+- `POST /api/products`
+- `PUT /api/products/:id`
+- `DELETE /api/products/:id`
 
-  👉 Aquí se refleja la **relación entre pedido y repartidor**: cada entrega vincula un pedido con un usuario de rol válido.
+- `GET /api/carts`
+- `GET /api/carts/:id`
+- `POST /api/carts`
+- `PUT /api/carts/:cid/product/:pid`
+- `DELETE /api/carts/:cid/product/:pid`
 
-- **POST /api/mocks/delivery/insert?quantity=N**  
-  Inserta `N` entregas en la colección `deliveries`.  
-  Se guardan las referencias (`order` y `deliveryMan` como ObjectId) y la fecha.  
-  Responde con `{ insertedCount: N }`.
+- `GET /api/users`
+- `GET /api/users/:id`
+- `POST /api/users`
+- `PUT /api/users/:id`
+- `DELETE /api/users/:id`
 
----
+## 🧪 Endpoints de mocks
 
-## 📌 Cómo probar
+### Usuarios
+- `GET /api/mocks/users/get?quantity=N`
+  - Genera `N` usuarios fake (por defecto 10)
+- `POST /api/mocks/users/insert?quantity=N`
+  - Inserta `N` usuarios fake en MongoDB
 
-1. Levantar el servidor:
-   ```bash
-   npm run dev
+### Productos
+- `GET /api/mocks/products/get?quantity=N`
+  - Genera `N` productos fake
+- `POST /api/mocks/products/insert?quantity=N`
+  - Inserta `N` productos fake en MongoDB
 
-## Ejemplos para probar bash:
+### Carritos
+- `GET /api/mocks/carts/get?quantity=N`
+  - Genera `N` carritos fake
+- `POST /api/mocks/carts/insert?quantity=N`
+  - Inserta `N` carritos fake en MongoDB
 
+### Entregas
+- `GET /api/mocks/delivery/get?quantity=N`
+  - Genera `N` entregas fake
+- `POST /api/mocks/delivery/insert?quantity=N`
+  - Inserta `N` entregas fake en MongoDB
+
+## ✅ Ejemplos
+
+```bash
 # Obtener 5 usuarios simulados
-GET http://localhost:8080/api/mocks/users?quantity=5
+curl "http://localhost:8080/api/mocks/users/get?quantity=5"
 
 # Insertar 3 productos simulados en MongoDB
-POST http://localhost:8080/api/mocks/products?quantity=3
+curl -X POST "http://localhost:8080/api/mocks/products/insert?quantity=3"
 
 # Obtener 2 carritos simulados
-GET http://localhost:8080/api/mocks/carts?quantity=2
+curl "http://localhost:8080/api/mocks/carts/get?quantity=2"
 
 # Insertar 4 carritos en MongoDB
-POST http://localhost:8080/api/mocks/carts?quantity=4
+curl -X POST "http://localhost:8080/api/mocks/carts/insert?quantity=4"
 
 # Obtener 5 entregas simuladas
-GET http://localhost:8080/api/mocks/delivery/get?quantity=5
+curl "http://localhost:8080/api/mocks/delivery/get?quantity=5"
 
 # Insertar 5 entregas en MongoDB
-POST http://localhost:8080/api/mocks/delivery/insert?quantity=5
+curl -X POST "http://localhost:8080/api/mocks/delivery/insert?quantity=5"
+```
 
+## 🚨 Estructura de respuesta de error
 
-# SE ADJUNTA COLLECTION DE POSTMAN CON LAS PRUEBAS COMPLETAS!! #
+Las respuestas de error usan el middleware global y devuelven siempre un JSON con esta forma:
+
+```json
+{
+  "status": "error",
+  "code": "ERROR_CODE",
+  "message": "Descripción legible del error",
+  "details": null
+}
+```
+
+- `status`: siempre `error`.
+- `code`: clave interna del error, como `VALIDATION_FAILED`, `BAD_ID` o `MOCK_QUANTITY_INVALID`.
+- `message`: texto claro para el cliente.
+- `details`: datos adicionales cuando existen validaciones o errores de Mongoose.
+
+### Ejemplo de error de cantidad inválida
+
+```bash
+curl "http://localhost:8080/api/mocks/products/get?quantity=-5"
+```
+
+```json
+{
+  "status": "error",
+  "code": "MOCK_QUANTITY_INVALID",
+  "message": "Cantidad de mocks inválida.",
+  "details": { "provided": "-5" }
+}
+```
+
+## ⚠️ Cómo probar casos inválidos
+
+- `quantity` faltante o no numérico en `/api/mocks/*/get` y `/api/mocks/*/insert` devuelve `400`.
+- Si no hay productos en la colección `products`, entonces `/api/mocks/carts/insert` puede devolver `MOCKS_NO_PRODUCTS`.
+- En los endpoints principales, un `id` inválido arroja `BAD_ID` y un recurso inexistente arroja `PRODUCT_NOT_FOUND`, `USER_NOT_FOUND` o `PURCHASE_NOT_FOUND`.
+
+## 🔧 Notas
+
+- El endpoint de insert de carritos requiere que haya productos existentes en la colección `products`.
+- El proyecto utiliza `mongoose` y `faker` para la generación y persistencia de datos de prueba.
+
+## 📁 Archivo adicional
+
+Se incluye `Postman_Collection/backend-3-77395.postman_collection.json` con pruebas de los endpoints.

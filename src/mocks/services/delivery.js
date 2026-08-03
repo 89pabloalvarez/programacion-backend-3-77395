@@ -1,9 +1,16 @@
-import { faker } from '@faker-js/faker'
+﻿import { faker } from '@faker-js/faker'
 import { CONSTANTS as CONST } from '../../common/constants.js'
 import { DeliveryModel } from '../../models/delivery.js'
+import { DomainError } from '../../common/errors.js'
+import { validateMockQuantity } from '../../common/functions.js'
 
 export function generateMockDeliveries(quantity = 10) {
-  return Array.from({ length: quantity }, () => ({
+  const parsed = validateMockQuantity(quantity)
+  if (!parsed.valid) {
+    throw new DomainError('MOCK_QUANTITY_INVALID', { provided: quantity })
+  }
+
+  return Array.from({ length: parsed.value }, () => ({
     order: faker.database.mongodbObjectId(),
     deliveryMan: {
       _id: faker.database.mongodbObjectId(),
@@ -17,10 +24,20 @@ export function generateMockDeliveries(quantity = 10) {
 }
 
 export async function saveMockDeliveries(quantity = 10) {
-  const deliveries = Array.from({ length: quantity }, () => ({
+  const parsed = validateMockQuantity(quantity)
+  if (!parsed.valid) {
+    throw new DomainError('MOCK_QUANTITY_INVALID', { provided: quantity })
+  }
+
+  const deliveries = Array.from({ length: parsed.value }, () => ({
     order: faker.database.mongodbObjectId(),
-    deliveryMan: faker.database.mongodbObjectId(), // solo guardamos el id
+    deliveryMan: faker.database.mongodbObjectId(),
     date: faker.date.recent()
   }))
-  return await DeliveryModel.insertMany(deliveries)
+
+  try {
+    return await DeliveryModel.insertMany(deliveries)
+  } catch (error) {
+    throw new DomainError('MOCK_INSERT_FAILED', { originalError: error.message })
+  }
 }

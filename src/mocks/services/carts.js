@@ -1,10 +1,17 @@
-import { faker } from '@faker-js/faker'
+﻿import { faker } from '@faker-js/faker'
 import { CartModel } from '../../models/cart.js'
 import { ProductModel } from '../../models/product.js'
 import { CONSTANTS as CONST } from '../../common/constants.js'
+import { DomainError } from '../../common/errors.js'
+import { validateMockQuantity } from '../../common/functions.js'
 
 export function generateMockCarts(quantity = 10) {
-  return Array.from({ length: quantity }, () => ({
+  const parsed = validateMockQuantity(quantity)
+  if (!parsed.valid) {
+    throw new DomainError('MOCK_QUANTITY_INVALID', { provided: quantity })
+  }
+
+  return Array.from({ length: parsed.value }, () => ({
     products: Array.from({ length: faker.number.int({ min: 1, max: 3 }) }, () => ({
       product: faker.database.mongodbObjectId(),
       quantity: faker.number.int({ min: 1, max: 5 })
@@ -16,10 +23,17 @@ export function generateMockCarts(quantity = 10) {
 }
 
 export async function saveMockCarts(quantity = 10) {
-  const products = await ProductModel.find().select('_id')
-  if (products.length === 0) throw new Error('No hay productos en la DB')
+  const parsed = validateMockQuantity(quantity)
+  if (!parsed.valid) {
+    throw new DomainError('MOCK_QUANTITY_INVALID', { provided: quantity })
+  }
 
-  const carts = Array.from({ length: quantity }, () => ({
+  const products = await ProductModel.find().select('_id')
+  if (products.length === 0) {
+    throw new DomainError('MOCKS_NO_PRODUCTS')
+  }
+
+  const carts = Array.from({ length: parsed.value }, () => ({
     products: Array.from({ length: faker.number.int({ min: 1, max: 3 }) }, () => ({
       product: faker.helpers.arrayElement(products)._id,
       quantity: faker.number.int({ min: 1, max: 5 })
@@ -29,5 +43,9 @@ export async function saveMockCarts(quantity = 10) {
     user: faker.database.mongodbObjectId()
   }))
 
-  return await CartModel.insertMany(carts)
+  try {
+    return await CartModel.insertMany(carts)
+  } catch (error) {
+    throw new DomainError('MOCK_INSERT_FAILED', { originalError: error.message })
+  }
 }

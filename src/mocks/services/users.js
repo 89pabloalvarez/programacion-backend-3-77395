@@ -1,9 +1,16 @@
-import { faker } from '@faker-js/faker'
+﻿import { faker } from '@faker-js/faker'
 import { UserModel } from '../../models/user.js'
 import { CONSTANTS as CONST } from '../../common/constants.js'
+import { DomainError } from '../../common/errors.js'
+import { validateMockQuantity } from '../../common/functions.js'
 
 export function generateMockUsers(quantity = 10) {
-  return Array.from({ length: quantity }, () => ({
+  const parsed = validateMockQuantity(quantity)
+  if (!parsed.valid) {
+    throw new DomainError('MOCK_QUANTITY_INVALID', { provided: quantity })
+  }
+
+  return Array.from({ length: parsed.value }, () => ({
     name: faker.person.firstName(),
     last_name: faker.person.lastName(),
     email: faker.internet.email(),
@@ -14,5 +21,9 @@ export function generateMockUsers(quantity = 10) {
 }
 
 export async function saveMockUsers(users) {
-  return await UserModel.insertMany(users)
+  try {
+    return await UserModel.insertMany(users)
+  } catch (error) {
+    throw new DomainError('MOCK_INSERT_FAILED', { originalError: error.message })
+  }
 }
