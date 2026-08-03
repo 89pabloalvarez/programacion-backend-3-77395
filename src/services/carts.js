@@ -128,6 +128,90 @@ class CartsService {
     const updatedCart = await this.cartsRepo.update(cid, cart)
     return { success: true, message: 'Carrito actualizado correctamente.', cart: updatedCart }
   }
+
+  // Reemplazar todos los productos del carrito.
+  async updateProducts(cid, products) {
+    if (!Array.isArray(products)) {
+      throw new DomainError('PRODUCT_CREATE_MUST_BE_ARRAY')
+    }
+
+    const cart = await this.getById(cid)
+    const productsMap = {}
+    const errors = []
+
+    for (const item of products) {
+      const validationResult = validateCartItem(item)
+      if (validationResult.error) {
+        errors.push({ item, message: validationResult.error })
+        continue
+      }
+
+      const quantityError = validateQuantity(item)
+      if (quantityError) {
+        errors.push({ item, message: quantityError })
+        continue
+      }
+
+      const product = await this.productsRepo.getById(item.productId)
+      if (!product) {
+        errors.push({ item, message: `Producto con id ${item.productId} no encontrado.` })
+        continue
+      }
+
+      addOrUpdateCartProduct(productsMap, product, item.quantity)
+    }
+
+    if (errors.length > 0) {
+      throw new DomainError('VALIDATION_FAILED', { errors })
+    }
+
+    cart.products = Object.values(productsMap)
+    const updatedCart = await this.cartsRepo.update(cid, cart)
+    return { success: true, message: 'Productos del carrito reemplazados correctamente.', cart: updatedCart }
+  }
+
+  // Actualizar solo la cantidad de un producto en el carrito.
+  async updateQuantity(cid, pid, quantity) {
+    if (quantity === undefined) {
+      throw new DomainError('REQUEST_NOT_COMPLETE', { body: 'No definido', message: CONST.QUANTITY_NOT_DEFINED })
+    }
+
+    const quantityError = validateQuantity({ productId: pid, quantity })
+    if (quantityError) {
+      throw new DomainError('QUANTITY_INVALID_VALUE', { quantity, message: quantityError })
+    }
+
+    const cart = await this.getById(cid)
+    const existingProduct = cart.products.find(p => p.product.toString() === pid)
+    if (!existingProduct) {
+      throw new DomainError('PRODUCT_NOT_FOUND', { searchedProduct: pid, message: CONST.PRODUCT_NOT_FOUND })
+    }
+
+    existingProduct.quantity = quantity
+    const updatedCart = await this.cartsRepo.update(cid, cart)
+    return { success: true, message: 'Cantidad actualizada correctamente.', cart: updatedCart }
+  }
+
+  // Eliminar un producto del carrito.
+  async deleteProduct(cid, pid) {
+    const cart = await this.getById(cid)
+    const productIndex = cart.products.findIndex(p => p.product.toString() === pid)
+    if (productIndex === -1) {
+      throw new DomainError('PRODUCT_NOT_FOUND', { searchedProduct: pid, message: CONST.PRODUCT_NOT_FOUND })
+    }
+
+    cart.products.splice(productIndex, 1)
+    const updatedCart = await this.cartsRepo.update(cid, cart)
+    return { success: true, message: 'Producto eliminado correctamente.', cart: updatedCart }
+  }
+
+  // Vaciar todos los productos del carrito.
+  async deleteAllProducts(cid) {
+    const cart = await this.getById(cid)
+    cart.products = []
+    const updatedCart = await this.cartsRepo.update(cid, cart)
+    return { success: true, message: 'Carrito vaciado correctamente.', cart: updatedCart }
+  }
 }
 
 export const cartsService = new CartsService(
