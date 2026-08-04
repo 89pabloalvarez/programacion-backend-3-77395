@@ -19,7 +19,6 @@
   },
   "homepage": "https://github.com/89pabloalvarez/programacion-backend-3-77395#readme",
   "dependencies": {
-    "colors": "^1.4.0",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "express-handlebars": "^8.0.6",
