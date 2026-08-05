@@ -21,6 +21,7 @@ export async function insertMockProducts(req, res, next) {
   try {
     const parsed = validateMockQuantity(req.query.quantity)
     if (!parsed.valid) {
+      logger.warn('Cantidad de mocks inválida en productos', { provided: req.query.quantity })
       throw new DomainError('MOCK_QUANTITY_INVALID', { provided: req.query.quantity })
     }
 
