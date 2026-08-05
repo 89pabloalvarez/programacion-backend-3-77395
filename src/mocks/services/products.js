@@ -2,12 +2,15 @@
 import { ProductModel } from '../../models/product.js'
 import { DomainError } from '../../common/errors.js'
 import { validateMockQuantity } from '../../common/functions.js'
+import logger from '../../config/logger.js'
 
 export function generateMockProducts(quantity = 10) {
   const parsed = validateMockQuantity(quantity)
   if (!parsed.valid) {
     throw new DomainError('MOCK_QUANTITY_INVALID', { provided: quantity })
   }
+
+  logger.debug('Generando mocks de productos', { quantity: parsed.value })
 
   return Array.from({ length: parsed.value }, () => ({
     title: faker.commerce.productName(),
@@ -25,8 +28,10 @@ export function generateMockProducts(quantity = 10) {
 
 export async function saveMockProducts(products) {
   try {
+    logger.info('Guardando mocks de productos en MongoDB', { quantity: products.length })
     return await ProductModel.insertMany(products)
   } catch (error) {
+    logger.error('Falló la inserción de mocks de productos', { error: error.message })
     throw new DomainError('MOCK_INSERT_FAILED', { originalError: error.message })
   }
 }

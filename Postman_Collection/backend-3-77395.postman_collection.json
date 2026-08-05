@@ -2612,6 +2612,32 @@
       ]
     },
     {
+      "name": "logging",
+      "item": [
+        {
+          "name": "Test Logger",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/api/logger/test",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "api",
+                "logger",
+                "test"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
       "name": "badURL",
       "request": {
         "method": "GET",

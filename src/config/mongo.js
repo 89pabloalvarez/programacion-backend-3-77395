@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
+import logger from './logger.js'
 
 dotenv.config()
 
@@ -16,12 +17,12 @@ const uri = `mongodb://`
     + `&appName=${process.env.MONGO_DB_NAME}`
 
 const mongoConnection = async () => {
-    console.log('Iniciando la conexión a la DB...')
+    logger.info('Iniciando la conexión a la DB...')
     try {
         await mongoose.connect(uri, { dbName: `${process.env.MONGO_DB_NAME}` })
-        console.log('Conexión a la DB completada satisfactoriamente.')
+        logger.info('Conexión a la DB completada satisfactoriamente.')
     } catch (err) {
-        console.error('Error al establecer la conexión a la DB: ', err)
+        logger.fatal('Error al establecer la conexión a la DB', { error: err.message, stack: err.stack })
     }
 }
 

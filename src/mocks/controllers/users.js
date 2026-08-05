@@ -1,6 +1,7 @@
 ﻿import { generateMockUsers, saveMockUsers } from '../services/users.js'
 import { validateMockQuantity } from '../../common/functions.js'
 import { DomainError } from '../../common/errors.js'
+import logger from '../../config/logger.js'
 
 export async function getMockUsers(req, res, next) {
   try {
@@ -20,6 +21,7 @@ export async function insertMockUsers(req, res, next) {
   try {
     const parsed = validateMockQuantity(req.query.quantity)
     if (!parsed.valid) {
+      logger.warn('Cantidad de mocks inválida en usuarios', { provided: req.query.quantity })
       throw new DomainError('MOCK_QUANTITY_INVALID', { provided: req.query.quantity })
     }
 

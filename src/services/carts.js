@@ -5,6 +5,7 @@ import { cartsRepository } from '../repositories/carts.js'
 import { productsRepository } from '../repositories/products.js'
 import { CartModel } from '../models/cart.js'
 import mongoose from 'mongoose'
+import logger from '../config/logger.js'
 
 class CartsService {
   constructor(cartsRepo, productsRepo) {
@@ -78,6 +79,7 @@ class CartsService {
 
     const newCart = { products: Object.values(productsMap) }
     const createdCart = await this.cartsRepo.create(newCart)
+    logger.info('Carrito creado correctamente', { cartId: createdCart._id })
 
     if (extraFieldsMessages.length > 0) {
       const populatedCart = await CartModel.findById(createdCart._id)

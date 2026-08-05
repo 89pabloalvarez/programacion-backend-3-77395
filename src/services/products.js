@@ -3,6 +3,7 @@ import { DomainError } from '../common/errors.js'
 import { validateFields } from '../common/functions.js'
 import { productsRepository } from '../repositories/products.js'
 import mongoose from 'mongoose'
+import logger from '../config/logger.js'
 
 class ProductsService {
   constructor(productsRepo) {
@@ -53,7 +54,9 @@ class ProductsService {
       throw new DomainError('VALIDATION_FAILED', isBodyValid)
     }
 
-    return await this.productsRepo.create(body)
+    const createdProduct = await this.productsRepo.create(body)
+    logger.info('Producto creado correctamente', { productId: createdProduct._id })
+    return createdProduct
   }
 
   // Actualiza un producto.

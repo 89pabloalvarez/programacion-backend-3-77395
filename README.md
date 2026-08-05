@@ -16,6 +16,38 @@ Este proyecto expone:
 npm install
 ```
 
+## 🧾 Logging y monitoreo básico
+
+El proyecto usa Winston como logger centralizado para registrar eventos tanto en consola como en archivos.
+
+### Niveles disponibles
+- `debug`
+- `http`
+- `info`
+- `warning`
+- `error`
+- `fatal`
+
+### Comportamiento por entorno
+- En desarrollo se muestran logs más detallados, incluyendo `debug`.
+- En producción el logger se enfoca en mensajes relevantes como `info`, `warning`, `error` y `fatal`.
+
+### Endpoint de prueba del logger
+
+```bash
+curl http://localhost:8080/api/logger/test
+```
+
+Este endpoint genera pruebas de todos los niveles para verificar que los registros aparecen en consola y en los archivos de logs.
+
+### Archivos de logs
+- Los logs generales se almacenan en la carpeta `logs/`.
+- Los errores y fallas críticas se guardan en archivos rotativos con nombre tipo `error-YYYY-MM-DD.log`.
+- La rotación limita tamaño y cantidad de archivos mantenidos.
+
+### Git
+- Los archivos generados en `logs/` quedan excluidos del repositorio mediante `.gitignore`.
+
 ## 📦 Variables de entorno
 
 Crea un archivo `.env` en la raíz con estas variables:

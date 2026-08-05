@@ -13,6 +13,7 @@ export const CONSTANTS = Object.freeze({
     USER_CREATE_NOT_PASSWORD: 'Se debe ingresar una contraseña al crear un usuario.',
     BAD_ID: 'El ID no tiene formato válido.',
     SERVER_ERROR: 'Error interno del servidor.',
+    ROUTE_NOT_FOUND: 'Ruta no encontrada',
     PRODUCT_CREATE_MUST_BE_ARRAY: 'El body debe ser un array.',
     REQUEST_NOT_COMPLETE: 'Solicitud incompleta.',
     QUANTITY_NOT_DEFINED: 'No se encontró el campo "quantity" en el cuerpo de la solicitud.',

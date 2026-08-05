@@ -14,6 +14,7 @@ export const ERROR_DICTIONARY = Object.freeze({
   MOCK_QUANTITY_INVALID: { statusCode: 400, code: 'MOCK_QUANTITY_INVALID', message: CONST.MOCK_QUANTITY_INVALID },
   MOCK_INSERT_FAILED: { statusCode: 500, code: 'MOCK_INSERT_FAILED', message: CONST.MOCK_INSERT_FAILED },
   MOCKS_NO_PRODUCTS: { statusCode: 500, code: 'MOCKS_NO_PRODUCTS', message: CONST.MOCKS_NO_PRODUCTS },
+  ROUTE_NOT_FOUND: { statusCode: 404, code: 'ROUTE_NOT_FOUND', message: CONST.ROUTE_NOT_FOUND },
   SERVER_ERROR: { statusCode: 500, code: 'SERVER_ERROR', message: CONST.SERVER_ERROR }
 })
 
