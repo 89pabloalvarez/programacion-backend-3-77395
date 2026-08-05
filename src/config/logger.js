@@ -13,7 +13,7 @@ fs.mkdirSync(logsDir, { recursive: true })
 const customLevels = {
   fatal: 0,
   error: 1,
-  warn: 2,
+  warning: 2,
   info: 3,
   http: 4,
   debug: 5
@@ -22,9 +22,19 @@ const customLevels = {
 const isProduction = process.env.NODE_ENV === 'production'
 const logLevel = isProduction ? 'info' : 'debug'
 
+const logFormat = winston.format.combine(
+  winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+  winston.format.printf(({ timestamp, level, message, ...meta }) =>
+    `${timestamp} [${level}] ${message}${Object.keys(meta).length ? ' ' + JSON.stringify(meta) : ''}`
+  )
+)
+
 const consoleTransport = new winston.transports.Console({
   level: logLevel,
-  format: winston.format.simple()
+  format: winston.format.combine(
+    winston.format.colorize({ all: true }),
+    logFormat
+  )
 })
 
 const combinedTransport = new DailyRotateFile({
@@ -33,7 +43,8 @@ const combinedTransport = new DailyRotateFile({
   zippedArchive: true,
   maxSize: '20m',
   maxFiles: '14d',
-  level: logLevel
+  level: logLevel,
+  format: logFormat
 })
 
 const errorTransport = new DailyRotateFile({
@@ -42,7 +53,8 @@ const errorTransport = new DailyRotateFile({
   zippedArchive: true,
   maxSize: '20m',
   maxFiles: '14d',
-  level: 'error'
+  level: 'error',
+  format: logFormat
 })
 
 const logger = winston.createLogger({
@@ -51,7 +63,7 @@ const logger = winston.createLogger({
   transports: [consoleTransport, combinedTransport, errorTransport]
 })
 
-logger.warning = (message, meta) => logger.log('warn', message, meta)
+logger.warning = (message, meta) => logger.log('warning', message, meta)
 logger.warn = logger.warning
 logger.http = (message, meta) => logger.log('http', message, meta)
 
