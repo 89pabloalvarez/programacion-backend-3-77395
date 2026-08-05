@@ -142,6 +142,36 @@ curl "http://localhost:8080/api/mocks/delivery/get?quantity=5"
 curl -X POST "http://localhost:8080/api/mocks/delivery/insert?quantity=5"
 ```
 
+## 📘 Documentación de la API con Swagger
+
+El proyecto expone documentación interactiva de la API generada con **Swagger/OpenAPI** (`swagger-jsdoc` + `swagger-ui-express`). La configuración vive separada de las rutas, en `src/config/swagger.js`, y se monta en `server.js` junto con el resto de la app — no requiere un comando aparte.
+
+### Cómo acceder
+
+Con el servidor levantado (`npm start`), entrá a:
+
+```
+http://localhost:8080/api/docs
+```
+
+Desde ahí podés ver cada endpoint agrupado por módulo, probarlo directamente con "Try it out" (incluye los mocks e inserciones a MongoDB), y consultar los schemas y errores documentados.
+
+### Qué está documentado
+
+La documentación está organizada por tags:
+
+| Tag | Cubre |
+|---|---|
+| **Users** | CRUD de usuarios (`/api/users`) |
+| **Orders** | CRUD de pedidos/carritos (`/api/carts`) |
+| **Deliveries** | CRUD de entregas (`/api/delivery`) |
+| **Mocks** | Generación e inserción de datos de prueba (`/api/mocks/*`) |
+| **Logger** | Endpoint de prueba del logger (`/api/logger/test`) |
+
+Cada endpoint documenta método, ruta, parámetros, body esperado (cuando aplica) y las respuestas reales — tanto la exitosa como los errores puntuales que ese endpoint puede devolver (`BAD_ID`, `*_NOT_FOUND`, `VALIDATION_FAILED`, `MOCK_QUANTITY_INVALID`, `MOCKS_NO_PRODUCTS`, etc.), reutilizando los mismos schemas (`User`, `Order`, `Delivery`, `OrderItem`, `ErrorResponse`, `SuccessResponse`) para evitar duplicación.
+
+> Nota: el endpoint de `/api/products` no está incluido en Swagger ya que no forma parte de los tags pedidos para esta pre-entrega (Users, Orders, Deliveries, Mocks, Logger).
+
 ## 🚨 Estructura de respuesta de error
 
 Las respuestas de error usan el middleware global y devuelven siempre un JSON con esta forma:
