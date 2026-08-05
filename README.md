@@ -1,14 +1,15 @@
 # ShipNow API — Backend 3 - Comisión 77395
 
-API de backend para un módulo de mocking que genera datos falsos y permite insertarlos en MongoDB.
+API de backend para un ShipNow con un módulo de api funcional y un módulo de api de mocking que genera datos falsos y permite insertarlos en MongoDB.
 
 ## 📌 Descripción
 
 Este proyecto expone:
-- APIs de productos, carritos y usuarios
+- APIs de productos, carritos, delivery y usuarios
 - APIs de mocks en `/api/mocks` para generar datos de prueba
 - vistas manejadas con Handlebars en `/` y `/realtimeproducts`
 - manejo de errores centralizado con `DomainError` y middleware global
+- log a bajo nivel en toda la arquitectura en capas 
 
 ## 🚀 Instalación
 
@@ -43,6 +44,7 @@ Este endpoint genera pruebas de todos los niveles para verificar que los registr
 ### Archivos de logs
 - Los logs generales se almacenan en la carpeta `logs/`.
 - Los errores y fallas críticas se guardan en archivos rotativos con nombre tipo `error-YYYY-MM-DD.log`.
+- La información y avisos se estarian guardando en archivos rotativos bajo el nombre `application-YYYY-MM-DD.log`.
 - La rotación limita tamaño y cantidad de archivos mantenidos.
 
 ### Git
@@ -59,6 +61,7 @@ MONGO_SHARD=<shard>
 MONGO_CLUSTER=<cluster>
 MONGO_ATLAS_SHARD=<atlas-shard>
 MONGO_DB_NAME=<nombre-de-la-base>
+NODE_ENV=<ambiente-de-ejecución>
 ```
 
 ## ▶️ Comandos
@@ -72,8 +75,8 @@ npm start
 ## 🌐 Rutas principales
 
 ### Rutas de vistas
-- `GET /` — lista de productos con paginación
-- `GET /cart/:cid` — detalle de carrito por ID
+- `GET /`
+- `GET /cart/:cid`
 
 ### Rutas API core
 - `GET /api/products`
@@ -104,19 +107,19 @@ npm start
 
 ### Productos
 - `GET /api/mocks/products/get?quantity=N`
-  - Genera `N` productos fake
+  - Genera `N` productos fake (por defecto 10)
 - `POST /api/mocks/products/insert?quantity=N`
   - Inserta `N` productos fake en MongoDB
 
 ### Carritos
 - `GET /api/mocks/carts/get?quantity=N`
-  - Genera `N` carritos fake
+  - Genera `N` carritos fake (por defecto 10)
 - `POST /api/mocks/carts/insert?quantity=N`
   - Inserta `N` carritos fake en MongoDB
 
 ### Entregas
 - `GET /api/mocks/delivery/get?quantity=N`
-  - Genera `N` entregas fake
+  - Genera `N` entregas fake (por defecto 10)
 - `POST /api/mocks/delivery/insert?quantity=N`
   - Inserta `N` entregas fake en MongoDB
 
@@ -168,9 +171,9 @@ La documentación está organizada por tags:
 | **Mocks** | Generación e inserción de datos de prueba (`/api/mocks/*`) |
 | **Logger** | Endpoint de prueba del logger (`/api/logger/test`) |
 
-Cada endpoint documenta método, ruta, parámetros, body esperado (cuando aplica) y las respuestas reales — tanto la exitosa como los errores puntuales que ese endpoint puede devolver (`BAD_ID`, `*_NOT_FOUND`, `VALIDATION_FAILED`, `MOCK_QUANTITY_INVALID`, `MOCKS_NO_PRODUCTS`, etc.), reutilizando los mismos schemas (`User`, `Order`, `Delivery`, `OrderItem`, `ErrorResponse`, `SuccessResponse`) para evitar duplicación.
+Cada endpoint documenta método, ruta, parámetros, body esperado (cuando aplica) y las respuestas reales — tanto la exitosa como los errores puntuales que ese endpoint puede devolver (`BAD_ID`, `USER_NOT_FOUND`, `PRODUCT_NOT_FOUND`, `ROUTE_NOT_FOUND`, `ID_NOT_FOUND`, `PURCHASE_NOT_FOUND`, `VALIDATION_FAILED`, `MOCK_QUANTITY_INVALID`, `MOCKS_NO_PRODUCTS`, etc.), reutilizando los mismos schemas (`User`, `Order`, `Delivery`, `OrderItem`, `ErrorResponse`, `SuccessResponse`) para evitar duplicación.
 
-> Nota: el endpoint de `/api/products` no está incluido en Swagger ya que no forma parte de los tags pedidos para esta pre-entrega (Users, Orders, Deliveries, Mocks, Logger).
+> NOTA: el endpoint de `/api/products` no está incluido en Swagger ya que no forma parte de los tags pedidos para esta pre-entrega (Users, Orders, Deliveries, Mocks, Logger).
 
 ## 🚨 Estructura de respuesta de error
 
@@ -187,7 +190,7 @@ Las respuestas de error usan el middleware global y devuelven siempre un JSON co
 
 - `status`: siempre `error`.
 - `code`: clave interna del error, como `VALIDATION_FAILED`, `BAD_ID` o `MOCK_QUANTITY_INVALID`.
-- `message`: texto claro para el cliente.
+- `message`: texto claro para el usuario.
 - `details`: datos adicionales cuando existen validaciones o errores de Mongoose.
 
 ### Ejemplo de error de cantidad inválida
@@ -209,7 +212,7 @@ curl "http://localhost:8080/api/mocks/products/get?quantity=-5"
 
 - `quantity` faltante o no numérico en `/api/mocks/*/get` y `/api/mocks/*/insert` devuelve `400`.
 - Si no hay productos en la colección `products`, entonces `/api/mocks/carts/insert` puede devolver `MOCKS_NO_PRODUCTS`.
-- En los endpoints principales, un `id` inválido arroja `BAD_ID` y un recurso inexistente arroja `PRODUCT_NOT_FOUND`, `USER_NOT_FOUND` o `PURCHASE_NOT_FOUND`.
+- En los endpoints principales, un `id` inválido devuelve `BAD_ID` y un recurso inexistente devuelve `PRODUCT_NOT_FOUND`, `USER_NOT_FOUND` o `PURCHASE_NOT_FOUND`.
 
 ## 🔧 Notas
 
