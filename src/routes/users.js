@@ -19,10 +19,9 @@ const router = Router()
  *               items:
  *                 $ref: '#/components/schemas/User'
  *       500:
- *         $ref: '#/components/schemas/ErrorResponse'
+ *         $ref: '#/components/responses/ServerError'
  */
 router.get('/', usersController.getAll)
-
 
 /**
  * @swagger
@@ -44,12 +43,11 @@ router.get('/', usersController.getAll)
  *             schema:
  *               $ref: '#/components/schemas/User'
  *       400:
- *         $ref: '#/components/schemas/ErrorResponse'
+ *         $ref: '#/components/responses/BadIdError'
  *       404:
- *         $ref: '#/components/schemas/ErrorResponse'
+ *         $ref: '#/components/responses/UserNotFoundError'
  */
 router.get('/:id', usersController.getById)
-
 
 /**
  * @swagger
@@ -62,7 +60,7 @@ router.get('/:id', usersController.getById)
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/User'
+ *             $ref: '#/components/schemas/UserCreateInput'
  *     responses:
  *       201:
  *         description: Usuario creado
@@ -71,10 +69,20 @@ router.get('/:id', usersController.getById)
  *             schema:
  *               $ref: '#/components/schemas/SuccessResponse'
  *       400:
- *         $ref: '#/components/schemas/ErrorResponse'
+ *         description: Falta la contraseña, o algún campo no cumple el esquema esperado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             examples:
+ *               noPassword:
+ *                 summary: Falta la contraseña
+ *                 value: { status: 'error', code: 'USER_CREATE_NOT_PASSWORD', message: 'Se debe ingresar una contraseña al crear un usuario.', details: null }
+ *               validation:
+ *                 summary: Campos inválidos/faltantes
+ *                 value: { status: 'error', code: 'VALIDATION_FAILED', message: 'Los datos enviados no son válidos.', details: { errors: ["Faltan campos: 'email'."] } }
  */
 router.post('/', usersController.create)
-
 
 /**
  * @swagger
@@ -94,6 +102,13 @@ router.post('/', usersController.create)
  *         application/json:
  *           schema:
  *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               last_name:
+ *                 type: string
+ *               status:
+ *                 type: boolean
  *     responses:
  *       200:
  *         description: Usuario actualizado
@@ -102,12 +117,15 @@ router.post('/', usersController.create)
  *             schema:
  *               $ref: '#/components/schemas/SuccessResponse'
  *       400:
- *         $ref: '#/components/schemas/ErrorResponse'
+ *         description: ID inválido o campos que no cumplen el esquema esperado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       404:
- *         $ref: '#/components/schemas/ErrorResponse'
+ *         $ref: '#/components/responses/UserNotFoundError'
  */
 router.patch('/:id', usersController.update)
-
 
 /**
  * @swagger
@@ -128,10 +146,8 @@ router.patch('/:id', usersController.update)
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/SuccessResponse'
- *       400:
- *         $ref: '#/components/schemas/ErrorResponse'
  *       404:
- *         $ref: '#/components/schemas/ErrorResponse'
+ *         $ref: '#/components/responses/UserNotFoundError'
  */
 router.delete('/:id', usersController.delete)
 

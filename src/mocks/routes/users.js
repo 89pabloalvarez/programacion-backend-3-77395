@@ -8,16 +8,16 @@ const router = Router()
  * /mocks/users/get:
  *   get:
  *     tags: [Mocks]
- *     summary: Obtener usuarios mock
+ *     summary: Generar usuarios de prueba (no se guardan en la base)
  *     parameters:
  *       - in: query
  *         name: quantity
  *         schema:
  *           type: integer
- *         description: Cantidad de usuarios a generar (opcional)
+ *         description: Cantidad a generar. Entero positivo, opcional (default 10).
  *     responses:
  *       200:
- *         description: Lista de usuarios mock
+ *         description: Lista de usuarios simulados
  *         content:
  *           application/json:
  *             schema:
@@ -25,7 +25,7 @@ const router = Router()
  *               items:
  *                 $ref: '#/components/schemas/User'
  *       400:
- *         $ref: '#/components/schemas/ErrorResponse'
+ *         $ref: '#/components/responses/MockQuantityInvalidError'
  */
 router.get('/get', getMockUsers)
 
@@ -34,13 +34,13 @@ router.get('/get', getMockUsers)
  * /mocks/users/insert:
  *   post:
  *     tags: [Mocks]
- *     summary: Insertar usuarios mock en la base de datos
+ *     summary: Generar e insertar usuarios de prueba en MongoDB
  *     parameters:
  *       - in: query
  *         name: quantity
  *         schema:
  *           type: integer
- *         description: Cantidad de usuarios a generar e insertar
+ *         description: Cantidad a generar e insertar. Entero positivo, opcional (default 10).
  *     responses:
  *       200:
  *         description: Inserción completada
@@ -49,9 +49,9 @@ router.get('/get', getMockUsers)
  *             schema:
  *               $ref: '#/components/schemas/SuccessResponse'
  *       400:
- *         $ref: '#/components/schemas/ErrorResponse'
+ *         $ref: '#/components/responses/MockQuantityInvalidError'
  *       500:
- *         $ref: '#/components/schemas/ErrorResponse'
+ *         $ref: '#/components/responses/MockInsertFailedError'
  */
 router.post('/insert', insertMockUsers)
 

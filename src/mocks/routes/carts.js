@@ -8,16 +8,17 @@ const router = Router()
  * /mocks/carts/get:
  *   get:
  *     tags: [Mocks]
- *     summary: Obtener carritos (pedidos) mock
+ *     summary: Generar pedidos (carritos) de prueba (no se guardan en la base)
+ *     description: Requiere que existan productos cargados en la base, ya que cada pedido mock se arma con productos reales.
  *     parameters:
  *       - in: query
  *         name: quantity
  *         schema:
  *           type: integer
- *         description: Cantidad de carritos a generar (opcional)
+ *         description: Cantidad a generar. Entero positivo, opcional (default 10).
  *     responses:
  *       200:
- *         description: Lista de carritos mock
+ *         description: Lista de pedidos simulados
  *         content:
  *           application/json:
  *             schema:
@@ -25,7 +26,9 @@ const router = Router()
  *               items:
  *                 $ref: '#/components/schemas/Order'
  *       400:
- *         $ref: '#/components/schemas/ErrorResponse'
+ *         $ref: '#/components/responses/MockQuantityInvalidError'
+ *       500:
+ *         $ref: '#/components/responses/MocksNoProductsError'
  */
 router.get('/get', getMockCarts)
 
@@ -34,13 +37,14 @@ router.get('/get', getMockCarts)
  * /mocks/carts/insert:
  *   post:
  *     tags: [Mocks]
- *     summary: Insertar carritos mock en la base de datos
+ *     summary: Generar e insertar pedidos (carritos) de prueba en MongoDB
+ *     description: Requiere que existan productos cargados en la base, ya que cada pedido mock se arma con productos reales.
  *     parameters:
  *       - in: query
  *         name: quantity
  *         schema:
  *           type: integer
- *         description: Cantidad de carritos a generar e insertar
+ *         description: Cantidad a generar e insertar. Entero positivo, opcional (default 10).
  *     responses:
  *       200:
  *         description: Inserción completada
@@ -49,9 +53,20 @@ router.get('/get', getMockCarts)
  *             schema:
  *               $ref: '#/components/schemas/SuccessResponse'
  *       400:
- *         $ref: '#/components/schemas/ErrorResponse'
+ *         $ref: '#/components/responses/MockQuantityInvalidError'
  *       500:
- *         $ref: '#/components/schemas/ErrorResponse'
+ *         description: No hay productos disponibles, o falló la inserción en MongoDB.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             examples:
+ *               noProducts:
+ *                 summary: No hay productos cargados
+ *                 value: { status: 'error', code: 'MOCKS_NO_PRODUCTS', message: 'No hay productos disponibles para generar carritos mock.', details: null }
+ *               insertFailed:
+ *                 summary: Falló la inserción en Mongo
+ *                 value: { status: 'error', code: 'MOCK_INSERT_FAILED', message: 'Ocurrió un error al insertar los datos de prueba en MongoDB.', details: { originalError: '...' } }
  */
 router.post('/insert', insertMockCarts)
 

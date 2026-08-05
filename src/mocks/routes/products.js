@@ -8,28 +8,18 @@ const router = Router()
  * /mocks/products/get:
  *   get:
  *     tags: [Mocks]
- *     summary: Obtener productos mock
+ *     summary: Generar productos de prueba (no se guardan en la base)
  *     parameters:
  *       - in: query
  *         name: quantity
  *         schema:
  *           type: integer
- *         description: Cantidad de productos a generar (opcional)
+ *         description: Cantidad a generar. Entero positivo, opcional (default 10).
  *     responses:
  *       200:
- *         description: Lista de productos mock
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
+ *         description: Lista de productos simulados
  *       400:
- *         description: Cantidad inválida
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
+ *         $ref: '#/components/responses/MockQuantityInvalidError'
  */
 router.get('/get', getMockProducts)
 
@@ -38,13 +28,13 @@ router.get('/get', getMockProducts)
  * /mocks/products/insert:
  *   post:
  *     tags: [Mocks]
- *     summary: Insertar productos mock en la base de datos
+ *     summary: Generar e insertar productos de prueba en MongoDB
  *     parameters:
  *       - in: query
  *         name: quantity
  *         schema:
  *           type: integer
- *         description: Cantidad de productos a generar e insertar
+ *         description: Cantidad a generar e insertar. Entero positivo, opcional (default 10).
  *     responses:
  *       200:
  *         description: Inserción completada
@@ -53,17 +43,9 @@ router.get('/get', getMockProducts)
  *             schema:
  *               $ref: '#/components/schemas/SuccessResponse'
  *       400:
- *         description: Cantidad inválida
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
+ *         $ref: '#/components/responses/MockQuantityInvalidError'
  *       500:
- *         description: Error al insertar mocks
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
+ *         $ref: '#/components/responses/MockInsertFailedError'
  */
 router.post('/insert', insertMockProducts)
 

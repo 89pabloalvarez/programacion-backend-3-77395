@@ -19,10 +19,9 @@ const router = Router()
  *               items:
  *                 $ref: '#/components/schemas/Order'
  *       500:
- *         $ref: '#/components/schemas/ErrorResponse'
+ *         $ref: '#/components/responses/ServerError'
  */
 router.get('/', cartsController.getAll)
-
 
 /**
  * @swagger
@@ -44,12 +43,11 @@ router.get('/', cartsController.getAll)
  *             schema:
  *               $ref: '#/components/schemas/Order'
  *       400:
- *         $ref: '#/components/schemas/ErrorResponse'
+ *         $ref: '#/components/responses/BadIdError'
  *       404:
- *         $ref: '#/components/schemas/ErrorResponse'
+ *         $ref: '#/components/responses/PurchaseNotFoundError'
  */
 router.get('/:id', cartsController.getById)
-
 
 /**
  * @swagger
@@ -57,12 +55,15 @@ router.get('/:id', cartsController.getById)
  *   post:
  *     tags: [Orders]
  *     summary: Crear un nuevo pedido
+ *     description: El body es un array de items { productId, quantity }. El pedido se arma con esos productos.
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Order'
+ *             type: array
+ *             items:
+ *               $ref: '#/components/schemas/CartItemInput'
  *     responses:
  *       201:
  *         description: Pedido creado
@@ -71,10 +72,22 @@ router.get('/:id', cartsController.getById)
  *             schema:
  *               $ref: '#/components/schemas/SuccessResponse'
  *       400:
- *         $ref: '#/components/schemas/ErrorResponse'
+ *         description: Body inválido, cantidad inválida o errores de validación de los items.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             examples:
+ *               notArray:
+ *                 summary: El body no es un array
+ *                 value: { status: 'error', code: 'PRODUCT_CREATE_MUST_BE_ARRAY', message: 'El body debe ser un array.', details: null }
+ *               validation:
+ *                 summary: Item con campos inválidos/faltantes
+ *                 value: { status: 'error', code: 'VALIDATION_FAILED', message: 'Los datos enviados no son válidos.', details: { errors: ["Faltan campos: 'productId'."] } }
+ *       404:
+ *         $ref: '#/components/responses/ProductNotFoundError'
  */
 router.post('/', cartsController.create)
-
 
 /**
  * @swagger
@@ -93,6 +106,16 @@ router.post('/', cartsController.create)
  *         required: true
  *         schema:
  *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               quantity:
+ *                 type: number
+ *             required: [quantity]
  *     responses:
  *       200:
  *         description: Producto agregado
@@ -101,10 +124,19 @@ router.post('/', cartsController.create)
  *             schema:
  *               $ref: '#/components/schemas/SuccessResponse'
  *       400:
- *         $ref: '#/components/schemas/ErrorResponse'
+ *         description: Falta la cantidad, la cantidad es inválida, o el ID no es válido.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       404:
+ *         description: Producto o pedido no encontrado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.put('/:cid/product/:pid', cartsController.addProduct)
-
 
 /**
  * @swagger
@@ -125,7 +157,7 @@ router.put('/:cid/product/:pid', cartsController.addProduct)
  *           schema:
  *             type: array
  *             items:
- *               $ref: '#/components/schemas/OrderItem'
+ *               $ref: '#/components/schemas/CartItemInput'
  *     responses:
  *       200:
  *         description: Pedido actualizado
@@ -133,9 +165,20 @@ router.put('/:cid/product/:pid', cartsController.addProduct)
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/SuccessResponse'
+ *       400:
+ *         description: Body inválido, cantidad inválida o errores de validación de los items.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       404:
+ *         description: Pedido o alguno de los productos no encontrado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.put('/:cid', cartsController.updateProducts)
-
 
 /**
  * @swagger
@@ -162,7 +205,8 @@ router.put('/:cid', cartsController.updateProducts)
  *             type: object
  *             properties:
  *               quantity:
- *                 type: integer
+ *                 type: number
+ *             required: [quantity]
  *     responses:
  *       200:
  *         description: Cantidad actualizada
@@ -170,6 +214,18 @@ router.put('/:cid', cartsController.updateProducts)
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/SuccessResponse'
+ *       400:
+ *         description: Falta la cantidad o es inválida.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       404:
+ *         description: El pedido o el producto dentro del pedido no existen.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.put('/:cid/products/:pid', cartsController.updateQuantity)
 
@@ -197,6 +253,12 @@ router.put('/:cid/products/:pid', cartsController.updateQuantity)
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/SuccessResponse'
+ *       404:
+ *         description: El pedido o el producto dentro del pedido no existen.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.delete('/:cid/products/:pid', cartsController.deleteProduct)
 
@@ -219,6 +281,8 @@ router.delete('/:cid/products/:pid', cartsController.deleteProduct)
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/SuccessResponse'
+ *       404:
+ *         $ref: '#/components/responses/PurchaseNotFoundError'
  */
 router.delete('/:cid', cartsController.deleteAllProducts)
 

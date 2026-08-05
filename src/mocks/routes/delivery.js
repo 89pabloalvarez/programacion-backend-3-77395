@@ -8,16 +8,16 @@ const router = Router()
  * /mocks/delivery/get:
  *   get:
  *     tags: [Mocks]
- *     summary: Obtener entregas mock
+ *     summary: Generar entregas de prueba (no se guardan en la base)
  *     parameters:
  *       - in: query
  *         name: quantity
  *         schema:
  *           type: integer
- *         description: Cantidad de entregas a generar (opcional)
+ *         description: Cantidad a generar. Entero positivo, opcional (default 10).
  *     responses:
  *       200:
- *         description: Lista de entregas mock
+ *         description: Lista de entregas simuladas
  *         content:
  *           application/json:
  *             schema:
@@ -25,7 +25,7 @@ const router = Router()
  *               items:
  *                 $ref: '#/components/schemas/Delivery'
  *       400:
- *         $ref: '#/components/schemas/ErrorResponse'
+ *         $ref: '#/components/responses/MockQuantityInvalidError'
  */
 router.get('/get', getMockDeliveries)
 
@@ -34,13 +34,13 @@ router.get('/get', getMockDeliveries)
  * /mocks/delivery/insert:
  *   post:
  *     tags: [Mocks]
- *     summary: Insertar entregas mock en la base de datos
+ *     summary: Generar e insertar entregas de prueba en MongoDB
  *     parameters:
  *       - in: query
  *         name: quantity
  *         schema:
  *           type: integer
- *         description: Cantidad de entregas a generar e insertar
+ *         description: Cantidad a generar e insertar. Entero positivo, opcional (default 10).
  *     responses:
  *       200:
  *         description: Inserción completada
@@ -49,9 +49,9 @@ router.get('/get', getMockDeliveries)
  *             schema:
  *               $ref: '#/components/schemas/SuccessResponse'
  *       400:
- *         $ref: '#/components/schemas/ErrorResponse'
+ *         $ref: '#/components/responses/MockQuantityInvalidError'
  *       500:
- *         $ref: '#/components/schemas/ErrorResponse'
+ *         $ref: '#/components/responses/MockInsertFailedError'
  */
 router.post('/insert', insertMockDeliveries)
 

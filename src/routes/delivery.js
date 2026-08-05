@@ -19,10 +19,9 @@ const router = Router()
  *               items:
  *                 $ref: '#/components/schemas/Delivery'
  *       500:
- *         $ref: '#/components/schemas/ErrorResponse'
+ *         $ref: '#/components/responses/ServerError'
  */
 router.get('/', deliveryController.getAll)
-
 
 /**
  * @swagger
@@ -44,12 +43,11 @@ router.get('/', deliveryController.getAll)
  *             schema:
  *               $ref: '#/components/schemas/Delivery'
  *       400:
- *         $ref: '#/components/schemas/ErrorResponse'
+ *         $ref: '#/components/responses/BadIdError'
  *       404:
- *         $ref: '#/components/schemas/ErrorResponse'
+ *         $ref: '#/components/responses/PurchaseNotFoundError'
  */
 router.get('/:id', deliveryController.getById)
-
 
 /**
  * @swagger
@@ -57,12 +55,13 @@ router.get('/:id', deliveryController.getById)
  *   post:
  *     tags: [Deliveries]
  *     summary: Crear una nueva entrega
+ *     description: Asocia un pedido (order, ID de un Cart) con un usuario repartidor (deliveryMan, ID de un User). Ambos deben existir previamente.
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Delivery'
+ *             $ref: '#/components/schemas/DeliveryCreateInput'
  *     responses:
  *       201:
  *         description: Entrega creada
@@ -71,10 +70,33 @@ router.get('/:id', deliveryController.getById)
  *             schema:
  *               $ref: '#/components/schemas/SuccessResponse'
  *       400:
- *         $ref: '#/components/schemas/ErrorResponse'
+ *         description: Falta order/deliveryMan, o alguno de los dos no es un ID válido.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             examples:
+ *               requestNotComplete:
+ *                 summary: Falta order o deliveryMan
+ *                 value: { status: 'error', code: 'REQUEST_NOT_COMPLETE', message: 'Solicitud incompleta.', details: { body: {} } }
+ *               badId:
+ *                 summary: order o deliveryMan no son ObjectId válidos
+ *                 value: { status: 'error', code: 'BAD_ID', message: 'El ID no tiene un formato válido.', details: { providedId: 'abc123' } }
+ *       404:
+ *         description: El pedido (order) o el usuario repartidor (deliveryMan) no existen.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             examples:
+ *               orderNotFound:
+ *                 summary: El pedido no existe
+ *                 value: { status: 'error', code: 'PURCHASE_NOT_FOUND', message: 'Recurso no encontrado.', details: { searchedCart: '64f...' } }
+ *               userNotFound:
+ *                 summary: El repartidor no existe
+ *                 value: { status: 'error', code: 'USER_NOT_FOUND', message: 'Usuario no encontrado.', details: { searchedUser: '64f...' } }
  */
 router.post('/', deliveryController.create)
-
 
 /**
  * @swagger
@@ -94,6 +116,11 @@ router.post('/', deliveryController.create)
  *         application/json:
  *           schema:
  *             type: object
+ *             properties:
+ *               order:
+ *                 type: string
+ *               deliveryMan:
+ *                 type: string
  *     responses:
  *       200:
  *         description: Entrega actualizada
@@ -102,12 +129,11 @@ router.post('/', deliveryController.create)
  *             schema:
  *               $ref: '#/components/schemas/SuccessResponse'
  *       400:
- *         $ref: '#/components/schemas/ErrorResponse'
+ *         $ref: '#/components/responses/BadIdError'
  *       404:
- *         $ref: '#/components/schemas/ErrorResponse'
+ *         $ref: '#/components/responses/PurchaseNotFoundError'
  */
 router.put('/:id', deliveryController.update)
-
 
 /**
  * @swagger
@@ -128,10 +154,8 @@ router.put('/:id', deliveryController.update)
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/SuccessResponse'
- *       400:
- *         $ref: '#/components/schemas/ErrorResponse'
  *       404:
- *         $ref: '#/components/schemas/ErrorResponse'
+ *         $ref: '#/components/responses/PurchaseNotFoundError'
  */
 router.delete('/:id', deliveryController.delete)
 
