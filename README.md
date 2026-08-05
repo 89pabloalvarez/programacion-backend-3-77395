@@ -218,6 +218,7 @@ curl "http://localhost:8080/api/mocks/products/get?quantity=-5"
 
 - El endpoint de insert de carritos requiere que haya productos existentes en la colección `products`.
 - El proyecto utiliza `mongoose` y `faker` para la generación y persistencia de datos de prueba.
+- El manejo de `state` (con sus valores permitidos: `pending`, `confirmed`, `shipped`, `delivered`) se encuentra en el módulo de `Order` (carts). El módulo de `Delivery` no tiene un campo de estado propio: solo asocia un `order` con un `deliveryMan`, así que el ciclo de vida del pedido (y la validación de su estado) se sigue consultando desde `Order`. No hace falta duplicar ese campo en `Delivery`.
 
 ## 📁 Archivo adicional
 

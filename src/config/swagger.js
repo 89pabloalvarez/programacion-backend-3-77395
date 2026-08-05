@@ -7,7 +7,7 @@ const options = {
     info: {
       title: 'ShipNow API',
       version: '1.0.0',
-      description: 'API de gestión de pedidos y entregas...'
+      description: 'API REST para la gestión de pedidos(carts), productos, usuarios y entregas de ShipNow, con generación de datos de prueba (mocks).'
     },
     servers: [{ url: `${CONST.BASEURL}/api`, description: 'Servidor local' }],
     tags: [
