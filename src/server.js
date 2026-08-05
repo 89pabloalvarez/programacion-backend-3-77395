@@ -9,6 +9,8 @@ import registerProductSockets from './sockets/registerProductSockets.js'
 import { errorHandler } from './middlewares/errorHandler.js'
 import { ERROR_DICTIONARY } from './common/errors.js'
 import logger from './config/logger.js'
+import swaggerUi from 'swagger-ui-express'
+import { swaggerSpec } from './config/swagger.js'
 
 const startServer = async () => {
   logger.info('Inicializando ShipNow API')
@@ -16,6 +18,7 @@ const startServer = async () => {
 
   app.use(CONST.DIR_URL_ROOT, apiRouter)
   app.use('/', viewsRouter)
+  app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
   app.use((req, res, next) => {
     const err = new Error(ERROR_DICTIONARY.ROUTE_NOT_FOUND.message)
     err.statusCode = ERROR_DICTIONARY.ROUTE_NOT_FOUND.statusCode
