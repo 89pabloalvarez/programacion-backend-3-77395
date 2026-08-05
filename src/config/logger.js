@@ -22,6 +22,15 @@ const customLevels = {
 const isProduction = process.env.NODE_ENV === 'production'
 const logLevel = isProduction ? 'info' : 'debug'
 
+winston.addColors({
+  fatal: 'magenta',
+  error: 'red',
+  warning: 'yellow',
+  info: 'green',
+  http: 'cyan',
+  debug: 'blue'
+})
+
 const logFormat = winston.format.combine(
   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
   winston.format.printf(({ timestamp, level, message, ...meta }) =>
