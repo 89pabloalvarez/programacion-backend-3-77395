@@ -223,3 +223,64 @@ curl "http://localhost:8080/api/mocks/products/get?quantity=-5"
 ## 📁 Archivo adicional
 
 Se incluye `Postman_Collection/backend-3-77395.postman_collection.json` con pruebas de los endpoints.
+
+## 🧪 Testing
+
+El proyecto incluye una suite de tests funcionales automatizados que valida los endpoints principales de la API contra una base de datos de testing separada de la de desarrollo.
+
+### Herramientas utilizadas
+
+- **[Mocha](https://mochajs.org/)**: organiza y ejecuta la suite de tests (`describe`/`it`).
+- **[Chai](https://www.chaijs.com/)**: librería de aserciones (`expect`) para validar status codes y estructura de las respuestas.
+- **[Supertest](https://github.com/ladjs/supertest)**: realiza peticiones HTTP contra la app de Express en memoria, sin necesidad de levantar un puerto real.
+
+La app de Express (`src/config/app.js`) está separada del arranque del servidor (`src/server.js`, que es el único lugar donde se llama a `app.listen`). Esto permite que los tests usen `app` directamente y Supertest sin tener que abrir manualmente un puerto ni depender de un servidor real.
+
+### Entorno de testing separado
+
+- Las variables de entorno de testing viven en un archivo `.env.test` (se debe ubicar en la raiz del proyecto; hay una plantilla en `.env.test.example`).
+- Al ejecutar `npm test`, el script fuerza `NODE_ENV=test`, y `src/config/mongo.js` detecta esa variable y carga `.env.test` en lugar de `.env`.
+- **Se requiere una base de datos de MongoDB separada de la de desarrollo** (es decir, otro `MONGO_DB_NAME` en la config del .env, el ejemplo que yo use es: `shipnow_test`). Los tests escriben y borran datos reales en esa base, por lo que **NUNCA** debe apuntar a la base de desarrollo/producción.
+- Al finalizar toda la suite, se hace `dropDatabase()` sobre la conexión de testing como limpieza final (ver `test/setup.js`).
+
+Variables necesarias en `.env.test`:
+
+```env
+NODE_ENV=test
+MONGO_USER=<usuario>
+MONGO_PASS=<contraseña>
+MONGO_CLUSTER=<cluster>
+MONGO_DB_NAME=shipnow_test
+MONGO_SHARD=<shard>
+MONGO_ATLAS_SHARD=<atlas-shard>
+```
+
+### Cómo ejecutar los tests
+
+```bash
+npm test
+```
+
+Esto corre `cross-env NODE_ENV=test mocha`, que:
+1. Carga `test/setup.js` (root hooks), que conecta a la base de testing antes de correr la suite y la limpia (`dropDatabase` + `disconnect`) al finalizar.
+2. Ejecuta todos los archivos `test/**/*.test.js`.
+
+### Módulos/endpoints cubiertos
+
+| Archivo | Endpoints | Casos cubiertos |
+|---|---|---|
+| `test/users.test.js` | `GET /api/users`, `POST /api/users`, `GET /api/users/:id` | listado paginado, creación válida (201), falta de password (`USER_CREATE_NOT_PASSWORD`), campo con tipo inválido (`VALIDATION_FAILED`), búsqueda por id existente, `BAD_ID`, `USER_NOT_FOUND` |
+| `test/orders.test.js` | `GET /api/carts`, `POST /api/carts`, `GET /api/carts/:id` | listado paginado, creación de pedido válido (201) usando un producto de prueba, body que no es array (`PRODUCT_CREATE_MUST_BE_ARRAY`), cantidad inválida (`VALIDATION_FAILED`), producto inexistente (`VALIDATION_FAILED`), búsqueda por id existente, `BAD_ID`, `PURCHASE_NOT_FOUND` |
+| `test/mocks.test.js` | `GET/POST /api/mocks/users/*`, `POST /api/mocks/carts/insert` | generación sin persistir, cantidad inválida (`MOCK_QUANTITY_INVALID`), inserción real en Mongo, inserción de pedidos mock cuando no hay productos (`MOCKS_NO_PRODUCTS`) y cuando sí hay |
+| `test/logger.test.js` | `GET /api/logger/test` | respuesta 200 y estructura `{ success, message }` |
+| `test/swagger.test.js` | `GET /api/docs`, ruta inexistente | Swagger responde 200 en HTML; ruta inexistente devuelve 404 con el formato de error (`ROUTE_NOT_FOUND`) documentado |
+
+En todos los casos se valida tanto el status HTTP como la estructura del body (propiedades esperadas, `status: 'error'`, `code`, etc.), no solo que el endpoint "responda".
+
+### Datos de prueba y limpieza
+
+- Los datos se generan dentro del propio test (`test/helpers/testData.js`: crea usuarios/productos válidos con emails únicos) o mediante los endpoints de mocks, nunca dependiendo de datos cargados manualmente.
+- Cada suite guarda los IDs que crea y los borra en sus hooks `after`/`afterEach` (borrado selectivo por `_id`, no por estado previo).
+- Los tests de mocks que insertan en Mongo comparan los IDs existentes antes/después de la inserción para borrar únicamente lo que ese test generó, sin importar qué datos hubiera antes.
+- Al final de toda la suite (`test/setup.js`) se hace un `dropDatabase()` de la base de testing como red de seguridad adicional.
+- Ningún test depende del orden de ejecución de los demás: cada uno crea y limpia sus propios datos, y los casos que necesitan un estado puntual (por ejemplo "no hay productos cargados") lo fuerzan explícitamente en lugar de asumirlo.
