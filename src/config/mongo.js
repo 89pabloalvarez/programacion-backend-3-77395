@@ -2,7 +2,9 @@ import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import logger from './logger.js'
 
-dotenv.config()
+// Switcheo del ambiente, si es testing va por un ldao y si es de ejecución "normal" va por .env.
+const envFile = process.env.NODE_ENV === 'test' ? '.env.test' : '.env'
+dotenv.config({ path: envFile })
 
 const uri = `mongodb://`
     + `${process.env.MONGO_USER}:${process.env.MONGO_PASS}`
