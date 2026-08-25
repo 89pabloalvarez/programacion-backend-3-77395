@@ -22,6 +22,12 @@ export const CONSTANTS = Object.freeze({
     MOCK_QUANTITY_INVALID: 'Cantidad de mocks inválida.',
     MOCK_INSERT_FAILED: 'Error al guardar los mocks en la base de datos.',
     MOCKS_NO_PRODUCTS: 'No hay productos disponibles para generar carritos mock.',
+    FILE_REQUIRED: 'Se debe adjuntar un archivo.',
+    FILE_TYPE_NOT_ALLOWED: 'El tipo de archivo no está permitido.',
+    FILE_TOO_LARGE: 'El archivo supera el tamaño máximo permitido.',
+    INVALID_FIELD_NAME: 'El campo del archivo enviado no coincide con el esperado.',
+    DOCUMENT_TYPE_INVALID: 'El tipo de documento no es válido.',
+    FILE_SAVE_ERROR: 'Ocurrió un error al guardar el archivo.',
     PRODUCT_CREATE_ALLOWED_FIELDS: [
         "title",
         "price",
@@ -94,5 +100,25 @@ export const CONSTANTS = Object.freeze({
         'low',
         'medium',
         'high'
-    ]
+    ],
+    UPLOAD_ALLOWED_MIME_TYPES: [
+        'application/pdf',
+        'image/jpeg',
+        'image/png'
+    ],
+    UPLOAD_MAX_FILE_SIZE_BYTES: 5 * 1024 * 1024,
+    USER_DOCUMENT_TYPES: [
+        'dni',
+        'license',
+        'proof_of_address',
+        'other'
+    ],
+    DELIVERY_DOCUMENT_TYPES: [
+        'delivery_receipt',
+        'signature',
+        'photo',
+        'other'
+    ],
+    USER_DOCUMENT_FIELD_NAME: 'document',
+    DELIVERY_RECEIPT_FIELD_NAME: 'receipt'
 })
