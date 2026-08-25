@@ -24,7 +24,8 @@ const options = {
             last_name: { type: 'string' },
             email: { type: 'string', format: 'email' },
             role: { type: 'array', items: { type: 'string' } },
-            status: { type: 'boolean' }
+            status: { type: 'boolean' },
+            documents: { type: 'array', items: { $ref: '#/components/schemas/DocumentMetadata' } }
           },
           required: ['name', 'last_name', 'email', 'role'],
           example: { _id: '64f...', name: 'Pablo', last_name: 'Alvarez', email: 'pablo@example.com', role: ['user'], status: true }
@@ -58,9 +59,23 @@ const options = {
             _id: { type: 'string' },
             order: { type: 'string' },
             deliveryMan: { $ref: '#/components/schemas/User' },
-            date: { type: 'string', format: 'date-time' }
+            date: { type: 'string', format: 'date-time' },
+            receipts: { type: 'array', items: { $ref: '#/components/schemas/DocumentMetadata' } }
           },
           required: ['order', 'deliveryMan']
+        },
+        DocumentMetadata: {
+          type: 'object',
+          description: 'Metadatos de un archivo subido (nunca se guarda el archivo en la base).',
+          properties: {
+            originalName: { type: 'string' },
+            storedName: { type: 'string' },
+            path: { type: 'string' },
+            mimeType: { type: 'string' },
+            size: { type: 'number' },
+            documentType: { type: 'string' },
+            uploadedAt: { type: 'string', format: 'date-time' }
+          }
         },
         ErrorResponse: {
           type: 'object',
@@ -219,6 +234,42 @@ const options = {
             'application/json': {
               schema: { $ref: '#/components/schemas/ErrorResponse' },
               example: { status: 'error', code: 'MOCKS_NO_PRODUCTS', message: 'No hay productos disponibles para generar carritos mock.', details: null }
+            }
+          }
+        },
+        FileRequiredError: {
+          description: 'No se envió ningún archivo en el campo esperado.',
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/ErrorResponse' },
+              example: { status: 'error', code: 'FILE_REQUIRED', message: 'Se debe adjuntar un archivo.', details: null }
+            }
+          }
+        },
+        FileTypeNotAllowedError: {
+          description: 'El mimetype del archivo enviado no está permitido (solo PDF, JPG o PNG).',
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/ErrorResponse' },
+              example: { status: 'error', code: 'FILE_TYPE_NOT_ALLOWED', message: 'El tipo de archivo no está permitido.', details: { providedMimeType: 'application/zip' } }
+            }
+          }
+        },
+        FileTooLargeError: {
+          description: 'El archivo supera el tamaño máximo permitido (5MB).',
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/ErrorResponse' },
+              example: { status: 'error', code: 'FILE_TOO_LARGE', message: 'El archivo supera el tamaño máximo permitido.', details: { multerCode: 'LIMIT_FILE_SIZE' } }
+            }
+          }
+        },
+        DocumentTypeInvalidError: {
+          description: 'El campo documentType enviado no está dentro de los valores permitidos.',
+          content: {
+            'application/json': {
+              schema: { $ref: '#/components/schemas/ErrorResponse' },
+              example: { status: 'error', code: 'DOCUMENT_TYPE_INVALID', message: 'El tipo de documento no es válido.', details: { provided: 'foo' } }
             }
           }
         },
