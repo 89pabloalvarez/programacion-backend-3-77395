@@ -58,6 +58,17 @@ class UsersController {
       next(error)
     }
   }
+
+  uploadDocument = async (req, res, next) => {
+    try {
+      const { id } = req.params
+      const { documentType } = req.body
+      const response = await this.service.uploadDocument(id, req.file, documentType)
+      res.status(201).json(response)
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 export const usersController = new UsersController(usersService)
