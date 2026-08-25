@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose'
 import mongoosePaginate from 'mongoose-paginate-v2'
+import { DocumentMetadataSchema } from './documentMetadata.js'
 
 const UserSchema = new Schema({
   name: {
@@ -25,6 +26,10 @@ const UserSchema = new Schema({
   status: {
     type: Boolean,
     default: true
+  },
+  documents: {
+    type: [DocumentMetadataSchema],
+    default: []
   }
 })
 
