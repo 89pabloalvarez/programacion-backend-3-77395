@@ -2,7 +2,9 @@
 import { DomainError } from '../common/errors.js'
 import { validateFields } from '../common/functions.js'
 import { usersRepository } from '../repositories/users.js'
+import { deleteUploadedFile, moveUploadedFile, UPLOAD_PATHS } from '../config/multer.js'
 import mongoose from 'mongoose'
+import path from 'path'
 import logger from '../config/logger.js'
 
 class UsersService {
@@ -82,6 +84,61 @@ class UsersService {
       throw new DomainError('USER_NOT_FOUND', { searchedUser: id, message: CONST.USER_NOT_FOUND })
     }
     return user
+  }
+
+  async uploadDocument(userId, file, documentType) {
+    if (!file) {
+      throw new DomainError('FILE_REQUIRED')
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      await deleteUploadedFile(file.path)
+      throw new DomainError('BAD_ID', { providedId: userId, message: CONST.BAD_ID })
+    }
+
+    const user = await this.usersRepo.getById(userId)
+    if (!user) {
+      await deleteUploadedFile(file.path)
+      throw new DomainError('USER_NOT_FOUND', { searchedUser: userId, message: CONST.USER_NOT_FOUND })
+    }
+
+    if (documentType && !CONST.USER_DOCUMENT_TYPES.includes(documentType)) {
+      await deleteUploadedFile(file.path)
+      throw new DomainError('DOCUMENT_TYPE_INVALID', {
+        provided: documentType,
+        allowed: CONST.USER_DOCUMENT_TYPES
+      })
+    }
+
+    let finalPath = file.path
+    if (documentType === 'license') {
+      finalPath = await moveUploadedFile(file.path, UPLOAD_PATHS.LICENSES_DIR, file.filename)
+    }
+
+    const metadata = {
+      originalName: file.originalname,
+      storedName: file.filename,
+      path: path.relative(process.cwd(), finalPath),
+      mimeType: file.mimetype,
+      size: file.size,
+      documentType: documentType || 'other',
+      uploadedAt: new Date()
+    }
+
+    user.documents.push(metadata)
+    await user.save()
+
+    logger.info('Documento de usuario cargado correctamente', {
+      userId,
+      documentType: metadata.documentType,
+      storedName: metadata.storedName
+    })
+
+    return {
+      success: true,
+      message: 'Documento cargado correctamente.',
+      data: { userId, document: metadata }
+    }
   }
 }
 
