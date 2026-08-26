@@ -57,7 +57,7 @@ class DeliveryController {
   uploadReceipt = async (req, res, next) => {
     try {
       const { id } = req.params
-      const { documentType } = req.body
+      const { documentType } = req.body || {}
       const response = await this.service.uploadReceipt(id, req.file, documentType)
       res.status(201).json(response)
     } catch (error) {
