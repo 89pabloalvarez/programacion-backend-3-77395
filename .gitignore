@@ -7,6 +7,8 @@ logs
 *.log
 *.tmp
 
+uploads/
+
 pids
 *.pid
 *.seed

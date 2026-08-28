@@ -1,4 +1,6 @@
 import { Schema, model } from 'mongoose'
+import mongoosePaginate from 'mongoose-paginate-v2'
+import { DocumentMetadataSchema } from './documentMetadata.js'
 
 const DeliverySchema = new Schema({
   order: {
@@ -14,7 +16,13 @@ const DeliverySchema = new Schema({
   date: {
     type: Date,
     default: Date.now
+  },
+  receipts: {
+    type: [DocumentMetadataSchema],
+    default: []
   }
 })
+
+DeliverySchema.plugin(mongoosePaginate)
 
 export const DeliveryModel = model('deliveries', DeliverySchema)

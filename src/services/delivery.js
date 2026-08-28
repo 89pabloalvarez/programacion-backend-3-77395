@@ -3,7 +3,9 @@ import { DomainError } from '../common/errors.js'
 import { deliveryRepository } from '../repositories/delivery.js'
 import { CartModel } from '../models/cart.js'
 import { UserModel } from '../models/user.js'
+import { deleteUploadedFile } from '../config/multer.js'
 import mongoose from 'mongoose'
+import path from 'path'
 import logger from '../config/logger.js'
 
 class DeliveryService {
@@ -83,6 +85,56 @@ class DeliveryService {
     }
 
     return deletedDelivery
+  }
+
+  async uploadReceipt(deliveryId, file, documentType) {
+    if (!file) {
+      throw new DomainError('FILE_REQUIRED')
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(deliveryId)) {
+      await deleteUploadedFile(file.path)
+      throw new DomainError('BAD_ID', { providedId: deliveryId, message: CONST.BAD_ID })
+    }
+
+    const delivery = await this.deliveryRepo.getById(deliveryId)
+    if (!delivery) {
+      await deleteUploadedFile(file.path)
+      throw new DomainError('PURCHASE_NOT_FOUND', { searchedDelivery: deliveryId, message: CONST.PURCHASE_NOT_FOUND })
+    }
+
+    if (documentType && !CONST.DELIVERY_DOCUMENT_TYPES.includes(documentType)) {
+      await deleteUploadedFile(file.path)
+      throw new DomainError('DOCUMENT_TYPE_INVALID', {
+        provided: documentType,
+        allowed: CONST.DELIVERY_DOCUMENT_TYPES
+      })
+    }
+
+    const metadata = {
+      originalName: file.originalname,
+      storedName: file.filename,
+      path: path.relative(process.cwd(), file.path),
+      mimeType: file.mimetype,
+      size: file.size,
+      documentType: documentType || 'delivery_receipt',
+      uploadedAt: new Date()
+    }
+
+    delivery.receipts.push(metadata)
+    await delivery.save()
+
+    logger.info('Comprobante de entrega cargado correctamente', {
+      deliveryId,
+      documentType: metadata.documentType,
+      storedName: metadata.storedName
+    })
+
+    return {
+      success: true,
+      message: 'Comprobante asociado correctamente a la entrega.',
+      data: { deliveryId, receipt: metadata }
+    }
   }
 }
 
