@@ -2182,6 +2182,91 @@
               "response": []
             }
           ]
+        },
+        {
+          "name": "MulterTest",
+          "item": [
+            {
+              "name": "createUserWithFile (le agrego un archivo no válido)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "document",
+                      "type": "file",
+                      "src": [
+                        "/C:/Users/Paul Rammone/Pictures/YO.jpeg"
+                      ]
+                    },
+                    {
+                      "key": "documentType",
+                      "value": "dni",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/users/6a60ea2678921b6dd4680b1b/documents",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users",
+                    "6a60ea2678921b6dd4680b1b",
+                    "documents"
+                  ]
+                },
+                "description": "Generated from cURL:    curl -X POST http://localhost:8080/api/users/<USER_ID>/documents \\\r\n     -F \"document=@/ruta/a/tu/archivo.pdf\" \\\r\n     -F \"documentType=dni\""
+              },
+              "response": []
+            },
+            {
+              "name": "createUserWithFile (le agrego un archivo válido)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "document",
+                      "type": "file",
+                      "src": [
+                        "/C:/Users/Paul Rammone/Pictures/stronghold.jpg"
+                      ]
+                    },
+                    {
+                      "key": "documentType",
+                      "value": "dni",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/users/6a60ea2678921b6dd4680b1b/documents",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "users",
+                    "6a60ea2678921b6dd4680b1b",
+                    "documents"
+                  ]
+                },
+                "description": "Generated from cURL:    curl -X POST http://localhost:8080/api/users/<USER_ID>/documents \\\r\n     -F \"document=@/ruta/a/tu/archivo.pdf\" \\\r\n     -F \"documentType=dni\""
+              },
+              "response": []
+            }
+          ]
         }
       ]
     },
@@ -2612,28 +2697,134 @@
       ]
     },
     {
-      "name": "logging",
+      "name": "logger",
+      "item": []
+    },
+    {
+      "name": "orders",
       "item": [
         {
-          "name": "Test Logger",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "http://localhost:8080/api/logger/test",
-              "protocol": "http",
-              "host": [
-                "localhost"
-              ],
-              "port": "8080",
-              "path": [
-                "api",
-                "logger",
-                "test"
-              ]
+          "name": "MulterTest",
+          "item": [
+            {
+              "name": "createUserWithFile (le agrego un archivo de \"comprobante de entrega\" no válido)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "receipt",
+                      "type": "file",
+                      "src": [
+                        "/C:/Users/Paul Rammone/Pictures/YO.jpeg"
+                      ]
+                    },
+                    {
+                      "key": "documentType",
+                      "value": "signature",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/delivery/6a58fce077eb2866ad3cfd69/receipt",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "delivery",
+                    "6a58fce077eb2866ad3cfd69",
+                    "receipt"
+                  ]
+                },
+                "description": "Generated from cURL:    curl -X POST http://localhost:8080/api/users/<USER_ID>/documents \\\r\n     -F \"document=@/ruta/a/tu/archivo.pdf\" \\\r\n     -F \"documentType=dni\""
+              },
+              "response": []
+            },
+            {
+              "name": "createUserWithFile (le agrego un archivo de \"comprobante de entrega\" válido)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "receipt",
+                      "type": "file",
+                      "src": [
+                        "/C:/Users/Paul Rammone/Pictures/YO.jpeg"
+                      ]
+                    },
+                    {
+                      "key": "documentType",
+                      "value": "signature",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/delivery/6a6278ab3e9ec95f220503e5/receipt",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "delivery",
+                    "6a6278ab3e9ec95f220503e5",
+                    "receipt"
+                  ]
+                },
+                "description": "Generated from cURL:    curl -X POST http://localhost:8080/api/users/<USER_ID>/documents \\\r\n     -F \"document=@/ruta/a/tu/archivo.pdf\" \\\r\n     -F \"documentType=dni\""
+              },
+              "response": []
+            },
+            {
+              "name": "createUserWithFile (le agrego un archivo de \"comprobante de entrega\" a una venta inexistente)",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "receipt",
+                      "type": "file",
+                      "src": "/ruta/a/tu/archivo.jpg"
+                    },
+                    {
+                      "key": "documentType",
+                      "value": "signature",
+                      "type": "text"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "http://localhost:8080/api/delivery/<DELIVERY_ID>/receipt",
+                  "protocol": "http",
+                  "host": [
+                    "localhost"
+                  ],
+                  "port": "8080",
+                  "path": [
+                    "api",
+                    "delivery",
+                    "<DELIVERY_ID>",
+                    "receipt"
+                  ]
+                },
+                "description": "Generated from cURL: curl -X POST http://localhost:8080/api/delivery/<DELIVERY_ID>/receipt \\\r\n  -F \"receipt=@/ruta/a/tu/archivo.jpg\" \\\r\n  -F \"documentType=signature\""
+              },
+              "response": []
             }
-          },
-          "response": []
+          ]
         }
       ]
     },
