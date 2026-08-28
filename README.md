@@ -315,7 +315,7 @@ curl "http://localhost:8080/api/mocks/products/get?quantity=-5"
 
 ## 📁 Archivo adicional
 
-Se incluye `Postman_Collection/backend-3-77395.postman_collection.json` con pruebas de los endpoints.
+Se incluye `Postman_Collection/backend-3-77395.postman_collection.json` con pruebas de los endpoints. (se incluyen las pruebas de Multer -hay que actualizar las imágenes mapeadas en el request nada mas-)
 
 ## 🧪 Testing
 
