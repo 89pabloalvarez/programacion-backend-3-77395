@@ -7,13 +7,14 @@ import { ERROR_DICTIONARY } from '../common/errors.js'
 import { CONSTANTS as CONST } from '../common/constants.js'
 import apiRouter from '../routes/index.js'
 import viewsRouter from '../views/views-router.js'
+import healthRouter from '../routes/health.js'
 import { swaggerSpec } from './swagger.js'
 
 const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static('src/public'))
-
+app.use('/health', healthRouter)
 app.use(loggerRequest)
 app.use(loggerResponse)
 
