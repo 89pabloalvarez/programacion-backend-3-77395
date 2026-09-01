@@ -30,6 +30,4 @@ Thumbs.db
 .env.*.local
 .env.test
 
-package-lock.json
-
 /ignore/
