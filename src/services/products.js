@@ -1,6 +1,6 @@
 import { CONSTANTS as CONST } from '../common/constants.js'
 import { DomainError } from '../common/errors.js'
-import { validateFields } from '../common/functions.js'
+import { validateFields, normalizePagination } from '../common/functions.js'
 import { productsRepository } from '../repositories/products.js'
 import mongoose from 'mongoose'
 import logger from '../config/logger.js'
@@ -11,7 +11,7 @@ class ProductsService {
   }
 
   // Obtener todos los productos.
-  async getAll({ limit = 10, page = 1, sort, query }) {
+  async getAll({ limit, page, sort, query }) {
     let filter = {}
     if (query) {
       if (query === 'true' || query === 'false') {
@@ -21,10 +21,11 @@ class ProductsService {
       }
     }
     const sortOption = sort ? { price: sort === 'asc' ? 1 : -1 } : {}
+    const { page: normalizedPage, limit: normalizedLimit } = normalizePagination({ page, limit })
 
     return await this.productsRepo.getAll(filter, {
-      page,
-      limit,
+      page: normalizedPage,
+      limit: normalizedLimit,
       sort: sortOption,
       lean: true
     })
