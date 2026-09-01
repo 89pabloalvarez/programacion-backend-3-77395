@@ -20,7 +20,8 @@ const customLevels = {
 }
 
 const isProduction = process.env.NODE_ENV === 'production'
-const logLevel = isProduction ? 'info' : 'debug'
+
+const logLevel = process.env.LOG_LEVEL || (isProduction ? 'info' : 'debug')
 
 winston.addColors({
   fatal: 'magenta',
