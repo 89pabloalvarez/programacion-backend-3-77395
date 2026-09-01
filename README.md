@@ -378,3 +378,82 @@ En todos los casos se valida tanto el status HTTP como la estructura del body (p
 - Los tests de mocks que insertan en Mongo comparan los IDs existentes antes/después de la inserción para borrar únicamente lo que ese test generó, sin importar qué datos hubiera antes.
 - Al final de toda la suite (`test/setup.js`) se hace un `dropDatabase()` de la base de testing como red de seguridad adicional.
 - Ningún test depende del orden de ejecución de los demás: cada uno crea y limpia sus propios datos, y los casos que necesitan un estado puntual (por ejemplo "no hay productos cargados") lo fuerzan explícitamente en lugar de asumirlo.
+
+## 🚀 Producción y Docker
+
+### Performance
+
+- **Paginación con tope máximo**: `GET /api/users`, `/api/carts` y `/api/delivery` aceptan `?page` y `?limit`, pero `limit` queda topeado en 100 (`normalizePagination` en `common/functions.js`) aunque el cliente pida más — nunca se devuelve la colección completa sin control.
+- **Carga de archivos limitada** (Multer, ver sección de arriba): tamaño máximo 5MB, tipos restringidos (pdf/jpg/png), `uploads/` fuera del repo (`.gitignore`).
+- **Logs sin datos sensibles ni tamaño descontrolado**: el middleware de logging redacta `password`/`token`/`secret` y trunca bodies grandes antes de escribirlos (`middlewares/logger.js`).
+
+### Variables de entorno
+
+Ver `.env.example`. Resumen:
+
+| Variable | Obligatoria | Descripción |
+|---|---|---|
+| `NODE_ENV` | No (default `development`) | `development` \| `test` \| `production` |
+| `PORT` | No (default `8080`) | Puerto donde escucha la API |
+| `LOG_LEVEL` | No | Override del nivel de logs (`debug`, `info`, etc.) |
+| `MONGO_USER`, `MONGO_PASS`, `MONGO_CLUSTER`, `MONGO_DB_NAME`, `MONGO_SHARD`, `MONGO_ATLAS_SHARD` | **Sí** | Conexión a MongoDB Atlas |
+
+**La app valida estas variables al arrancar** (`config/validateEnv.js`, llamado desde `server.js`): si falta alguna variable de Mongo, el proceso corta con `process.exit(1)` y un mensaje claro en logs y consola, **antes** de intentar conectar a la base o abrir el puerto. Si la conexión a Mongo falla igual, el servidor tampoco levanta el puerto (no queda "a medias").
+
+### Cómo correr todo
+
+```bash
+npm install
+cp .env.example .env      # completar con credenciales reales
+npm start                 # API en http://localhost:8080
+```
+
+Tests (usa `.env.test`, base de datos separada):
+```bash
+cp .env.test.example .env.test   # completar
+npm test
+```
+
+Swagger: `http://localhost:8080/api/docs`
+Health check: `http://localhost:8080/health`
+
+### Health check
+
+```
+GET /health
+```
+Devuelve `status`, `environment`, `uptime`, `timestamp` y `database` (connected/disconnected). No expone URIs de conexión, credenciales ni variables de entorno.
+
+### Endpoints internos en producción
+
+**Criterio aplicado**: `/api/mocks/*` y `/api/logger/test` quedan **deshabilitados en producción** (404, mismo formato de error) — son utilidades de desarrollo/testing sin valor para un cliente real. **Swagger (`/api/docs`) queda disponible** en producción: es documentación, no expone secretos. Implementado en `middlewares/restrictInProduction.js`.
+
+### Docker
+
+**Build:**
+```bash
+docker build -t shipnow-api .
+```
+
+**Run** (variables desde un archivo `.env`):
+```bash
+docker run -p 8080:8080 --env-file .env shipnow-api
+```
+
+O pasando variables sueltas con `-e`:
+```bash
+docker run -p 8080:8080 \
+  -e NODE_ENV=production \
+  -e MONGO_USER=... -e MONGO_PASS=... -e MONGO_CLUSTER=... \
+  -e MONGO_DB_NAME=... -e MONGO_SHARD=... -e MONGO_ATLAS_SHARD=... \
+  shipnow-api
+```
+
+La API queda disponible en `http://localhost:8080`. Con el contenedor corriendo, probar:
+- `GET http://localhost:8080/health`
+- `GET http://localhost:8080/api/docs`
+- `GET http://localhost:8080/api/users` (o cualquier endpoint principal)
+
+### Qué NO se sube al repo ni a la imagen
+
+`node_modules`, `.env`/`.env.test` (credenciales reales), `.git`, `logs/`, `uploads/` (archivos subidos por usuarios), `coverage`, archivos temporales — ver `.gitignore` y `.dockerignore`. Los logs y los archivos subidos son datos generados en tiempo de ejecución, no artefactos de build: no deben viajar ni al control de versiones ni a la imagen Docker.
