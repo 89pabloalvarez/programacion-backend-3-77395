@@ -2,9 +2,8 @@ import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 import logger from './logger.js'
 
-// Switcheo del ambiente, si es testing va por un ldao y si es de ejecución "normal" va por .env.
 const envFile = process.env.NODE_ENV === 'test' ? '.env.test' : '.env'
-dotenv.config({ path: envFile })
+dotenv.config({ path: envFile, quiet: true })
 
 const uri = `mongodb://`
     + `${process.env.MONGO_USER}:${process.env.MONGO_PASS}`
@@ -25,6 +24,7 @@ const mongoConnection = async () => {
         logger.info('Conexión a la DB completada satisfactoriamente.')
     } catch (err) {
         logger.fatal('Error al establecer la conexión a la DB', { error: err.message, stack: err.stack })
+        throw err
     }
 }
 
