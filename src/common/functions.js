@@ -120,3 +120,20 @@ export function addOrUpdateCartProduct(productsMap, product, quantity) {
     productsMap[product._id].quantity += quantity
   }
 }
+
+export function normalizePagination({ page, limit } = {}) {
+    let parsedPage = parseInt(page, 10)
+    let parsedLimit = parseInt(limit, 10)
+
+    if (!Number.isInteger(parsedPage) || parsedPage < 1) {
+        parsedPage = CONST.DEFAULT_PAGE
+    }
+    if (!Number.isInteger(parsedLimit) || parsedLimit < 1) {
+        parsedLimit = CONST.DEFAULT_PAGE_LIMIT
+    }
+    if (parsedLimit > CONST.MAX_PAGE_LIMIT) {
+        parsedLimit = CONST.MAX_PAGE_LIMIT
+    }
+
+    return { page: parsedPage, limit: parsedLimit }
+}
