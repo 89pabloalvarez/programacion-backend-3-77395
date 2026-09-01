@@ -1,6 +1,18 @@
+import dotenv from 'dotenv'
+
+const envFile = process.env.NODE_ENV === 'test' ? '.env.test' : '.env'
+dotenv.config({ path: envFile, quiet: true })
+
+// Si no se seteó la variable de entorno PORT, se usa 8080 por defecto...
+const PORT = parseInt(process.env.PORT, 10) || 8080
+
 export const CONSTANTS = Object.freeze({
-    PORT: 8080,
-    BASEURL: `http://localhost:8080`,
+    NODE_ENV: process.env.NODE_ENV || 'development',
+    PORT,
+    BASEURL: process.env.BASE_URL || `http://localhost:${PORT}`,
+    DEFAULT_PAGE: 1,
+    DEFAULT_PAGE_LIMIT: 10,
+    MAX_PAGE_LIMIT: 100,
     DIR_URL_ROOT: '/api',
     DIR_URL_MOCKS: '/mocks',
     DIR_URL_PRODUCTS: '/products',
