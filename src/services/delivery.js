@@ -1,5 +1,6 @@
 import { CONSTANTS as CONST } from '../common/constants.js'
 import { DomainError } from '../common/errors.js'
+import { normalizePagination } from '../common/functions.js'
 import { deliveryRepository } from '../repositories/delivery.js'
 import { CartModel } from '../models/cart.js'
 import { UserModel } from '../models/user.js'
@@ -13,13 +14,14 @@ class DeliveryService {
     this.deliveryRepo = deliveryRepo
   }
 
-  async getAll({ limit = 10, page = 1, sort, query }) {
+  async getAll({ limit, page, sort, query }) {
     const filter = query ? { deliveryMan: query } : {}
     const sortOption = sort ? { date: sort === 'asc' ? 1 : -1 } : {}
+    const { page: normalizedPage, limit: normalizedLimit } = normalizePagination({ page, limit })
 
     return await this.deliveryRepo.getAll(filter, {
-      page,
-      limit,
+      page: normalizedPage,
+      limit: normalizedLimit,
       sort: sortOption,
       lean: true
     })

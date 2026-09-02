@@ -1,6 +1,6 @@
 ﻿import { CONSTANTS as CONST } from '../common/constants.js'
 import { DomainError } from '../common/errors.js'
-import { validateFields } from '../common/functions.js'
+import { validateFields, normalizePagination } from '../common/functions.js'
 import { usersRepository } from '../repositories/users.js'
 import { deleteUploadedFile, moveUploadedFile, UPLOAD_PATHS } from '../config/multer.js'
 import mongoose from 'mongoose'
@@ -13,13 +13,14 @@ class UsersService {
   }
 
   // Obtener todos los usuarios.
-  async getAll({ limit = 10, page = 1, sort, query }) {
+  async getAll({ limit, page, sort, query }) {
     const filter = query ? { status: query } : {}
     const sortOption = sort ? { name: sort === 'asc' ? 1 : -1 } : {}
+    const { page: normalizedPage, limit: normalizedLimit } = normalizePagination({ page, limit })
 
     return await this.usersRepo.getAll(filter, {
-      page,
-      limit,
+      page: normalizedPage,
+      limit: normalizedLimit,
       sort: sortOption,
       lean: true
     })

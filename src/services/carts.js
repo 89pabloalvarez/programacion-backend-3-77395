@@ -1,6 +1,6 @@
 import { CONSTANTS as CONST } from '../common/constants.js'
 import { DomainError } from '../common/errors.js'
-import { validateCartItem, validateQuantity, addOrUpdateCartProduct } from '../common/functions.js'
+import { validateCartItem, validateQuantity, addOrUpdateCartProduct, normalizePagination } from '../common/functions.js'
 import { cartsRepository } from '../repositories/carts.js'
 import { productsRepository } from '../repositories/products.js'
 import { CartModel } from '../models/cart.js'
@@ -14,13 +14,14 @@ class CartsService {
   }
 
   // Obtener todos los carritos.
-  async getAll({ limit = 10, page = 1, sort, query }) {
+  async getAll({ limit, page, sort, query }) {
     const filter = query ? { category: query } : {}
     const sortOption = sort ? { price: sort === 'asc' ? 1 : -1 } : {}
+    const { page: normalizedPage, limit: normalizedLimit } = normalizePagination({ page, limit })
 
     return await this.cartsRepo.getAll(filter, {
-      page,
-      limit,
+      page: normalizedPage,
+      limit: normalizedLimit,
       sort: sortOption,
       lean: true
     })

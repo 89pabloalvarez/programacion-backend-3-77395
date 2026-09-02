@@ -9,6 +9,7 @@ import mocksProductsRouter from '../mocks/routes/products.js'
 import mocksCartsRouter from '../mocks/routes/carts.js'
 import mocksDeliveryRouter from '../mocks/routes/delivery.js'
 import loggerRouter from './logger.js'
+import { blockInProduction } from '../middlewares/restrictInProduction.js'
 
 const router = Router()
 
@@ -16,10 +17,12 @@ router.use(CONST.DIR_URL_PRODUCTS, productsRouter)
 router.use(CONST.DIR_URL_CARTS, cartsRouter)
 router.use(CONST.DIR_URL_USERS, usersRouter)
 router.use(CONST.DIR_URL_DELIVERY, deliveryRouter)
-router.use(`${CONST.DIR_URL_MOCKS}${CONST.DIR_URL_USERS}`, mocksUsersRouter)
-router.use(`${CONST.DIR_URL_MOCKS}${CONST.DIR_URL_PRODUCTS}`, mocksProductsRouter)
-router.use(`${CONST.DIR_URL_MOCKS}${CONST.DIR_URL_CARTS}`, mocksCartsRouter)
-router.use(`${CONST.DIR_URL_MOCKS}${CONST.DIR_URL_DELIVERY}`, mocksDeliveryRouter)
-router.use('/logger', loggerRouter)
+
+// Endpoints internos de desarrollo/testing qyue no se deben usar en producción
+router.use(`${CONST.DIR_URL_MOCKS}${CONST.DIR_URL_USERS}`, blockInProduction, mocksUsersRouter)
+router.use(`${CONST.DIR_URL_MOCKS}${CONST.DIR_URL_PRODUCTS}`, blockInProduction, mocksProductsRouter)
+router.use(`${CONST.DIR_URL_MOCKS}${CONST.DIR_URL_CARTS}`, blockInProduction, mocksCartsRouter)
+router.use(`${CONST.DIR_URL_MOCKS}${CONST.DIR_URL_DELIVERY}`, blockInProduction, mocksDeliveryRouter)
+router.use('/logger', blockInProduction, loggerRouter)
 
 export default router
