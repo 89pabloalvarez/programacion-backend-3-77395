@@ -1,9 +1,3 @@
-// Necesito primero validar que cargaron bien las variables, sino falla docker!
-import dotenv from 'dotenv'
-if (!process.env.MONGO_USER) {
-  dotenv.config()
-}
-
 import app from './config/app.js'
 import mongoConnection from './config/mongo.js'
 import { Server } from 'socket.io'
@@ -15,12 +9,10 @@ import logger from './config/logger.js'
 
 const startServer = async () => {
 
-  // validamos las variables de entorno ANTES de intentar conectar a mongo.
   validateEnv()
 
   logger.info('Inicializando ShipNow API', { environment: CONST.NODE_ENV })
 
-  // Agrego un try/catch para que si falla la conexión a mongo, no intente levantar el servidor y quede colgado.
   try {
     await mongoConnection()
   } catch (error) {
