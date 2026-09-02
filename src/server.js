@@ -1,3 +1,9 @@
+// Necesito primero validar que cargaron bien las variables, sino falla docker!
+import dotenv from 'dotenv'
+if (!process.env.MONGO_USER) {
+  dotenv.config()
+}
+
 import app from './config/app.js'
 import mongoConnection from './config/mongo.js'
 import { Server } from 'socket.io'

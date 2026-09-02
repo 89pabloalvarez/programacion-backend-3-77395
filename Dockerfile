@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 # Se copian primero los manifiestos para aprovechar la cache de capas de Docker: si no cambian package.json/package-lock.json, no se reinstalan dependencias en cada build.
 COPY package*.json ./
 
-RUN npm install --omit=dev
+RUN npm install
 
 # Recién acá se copia el resto del código (lo que sí cambia seguido)..
 COPY . .

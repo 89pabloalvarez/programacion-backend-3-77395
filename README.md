@@ -395,7 +395,7 @@ Ver `.env.example`. Resumen:
 |---|---|---|
 | `NODE_ENV` | No (default `development`) | `development` \| `test` \| `production` |
 | `PORT` | No (default `8080`) | Puerto donde escucha la API |
-| `LOG_LEVEL` | No | Override del nivel de logs (`debug`, `info`, etc.) |
+| `LOG_LEVEL` | No (default `test`) | Override del nivel de logs (`debug`, `info`, etc.) |
 | `MONGO_USER`, `MONGO_PASS`, `MONGO_CLUSTER`, `MONGO_DB_NAME`, `MONGO_SHARD`, `MONGO_ATLAS_SHARD` | **Sí** | Conexión a MongoDB Atlas |
 
 **La app valida estas variables al arrancar** (`config/validateEnv.js`, llamado desde `server.js`): si falta alguna variable de Mongo, el proceso corta con `process.exit(1)` y un mensaje claro en logs y consola, **antes** de intentar conectar a la base o abrir el puerto. Si la conexión a Mongo falla igual, el servidor tampoco levanta el puerto (no queda "a medias").
