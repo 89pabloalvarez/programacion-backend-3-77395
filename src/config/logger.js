@@ -39,14 +39,6 @@ const logFormat = winston.format.combine(
   )
 )
 
-const consoleTransport = new winston.transports.Console({
-  level: logLevel,
-  format: winston.format.combine(
-    winston.format.colorize({ all: true }),
-    logFormat
-  )
-})
-
 const combinedTransport = new DailyRotateFile({
   filename: path.join(logsDir, 'application-%DATE%.log'),
   datePattern: 'YYYY-MM-DD',
@@ -67,10 +59,22 @@ const errorTransport = new DailyRotateFile({
   format: logFormat
 })
 
+const transports = [combinedTransport, errorTransport]
+
+if (!isProduction) {
+  transports.push(new winston.transports.Console({
+    level: logLevel,
+    format: winston.format.combine(
+      winston.format.colorize({ all: true }),
+      logFormat
+    )
+  }))
+}
+
 const logger = winston.createLogger({
   levels: customLevels,
   level: logLevel,
-  transports: [consoleTransport, combinedTransport, errorTransport]
+  transports
 })
 
 logger.warning = (message, meta) => logger.log('warning', message, meta)
