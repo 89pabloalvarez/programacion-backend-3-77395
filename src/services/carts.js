@@ -215,6 +215,20 @@ class CartsService {
     const updatedCart = await this.cartsRepo.update(cid, cart)
     return { success: true, message: 'Carrito vaciado correctamente.', cart: updatedCart }
   }
+
+  // Actualiza el estado del pedido (pending -> confirmed -> shipped -> delivered).
+  async updateState(cid, state) {
+    if (!state || !CONST.ORDER_STATES.includes(state)) {
+      throw new DomainError('INVALID_STATE', { provided: state, allowed: CONST.ORDER_STATES })
+    }
+
+    const cart = await this.getById(cid)
+    cart.state = state
+    const updatedCart = await this.cartsRepo.update(cid, cart)
+    logger.info('Estado del pedido actualizado', { cartId: cid, state })
+
+    return { success: true, message: 'Estado del pedido actualizado correctamente.', cart: updatedCart }
+  }
 }
 
 export const cartsService = new CartsService(

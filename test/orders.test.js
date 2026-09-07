@@ -111,4 +111,46 @@ describe('Pedidos - /api/carts', () => {
       expect(res.body.code).to.equal('PURCHASE_NOT_FOUND')
     })
   })
+
+  describe('PATCH /api/carts/:cid/state (flujo creación + actualización)', () => {
+    let cartId
+
+    before(async () => {
+      const res = await request(app)
+        .post('/api/carts')
+        .send([{ productId: product._id.toString(), quantity: 1 }])
+      cartId = res.body.cart._id
+      createdCartIds.push(cartId)
+    })
+
+    it('actualiza el estado del pedido con un valor válido (200)', async () => {
+      const res = await request(app)
+        .patch(`/api/carts/${cartId}/state`)
+        .send({ state: 'shipped' })
+
+      expect(res.status).to.equal(200)
+      expect(res.body.success).to.equal(true)
+      expect(res.body.cart.state).to.equal('shipped')
+
+      const persisted = await request(app).get(`/api/carts/${cartId}`)
+      expect(persisted.body.state).to.equal('shipped')
+    })
+
+    it('rechaza un estado inválido (400 INVALID_STATE)', async () => {
+      const res = await request(app)
+        .patch(`/api/carts/${cartId}/state`)
+        .send({ state: 'en-la-luna' })
+
+      expect(res.status).to.equal(400)
+      expect(res.body.status).to.equal('error')
+      expect(res.body.code).to.equal('INVALID_STATE')
+    })
+
+    it('rechaza la actualización sin enviar estado (400 INVALID_STATE)', async () => {
+      const res = await request(app).patch(`/api/carts/${cartId}/state`).send({})
+
+      expect(res.status).to.equal(400)
+      expect(res.body.code).to.equal('INVALID_STATE')
+    })
+  })
 })
