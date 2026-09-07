@@ -93,6 +93,18 @@ class CartsController {
       next(error)
     }
   }
+
+  // Actualizar el estado del pedido.
+  updateState = async (req, res, next) => {
+    try {
+      const { cid } = req.params
+      const { state } = req.body || {}
+      const response = await this.service.updateState(cid, state)
+      res.json(response)
+    } catch (error) {
+      next(error)
+    }
+  }
 }
 
 export const cartsController = new CartsController(cartsService)

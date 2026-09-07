@@ -286,4 +286,51 @@ router.delete('/:cid/products/:pid', cartsController.deleteProduct)
  */
 router.delete('/:cid', cartsController.deleteAllProducts)
 
+/**
+ * @swagger
+ * /carts/{cid}/state:
+ *   patch:
+ *     tags: [Orders]
+ *     summary: Actualizar el estado del pedido
+ *     description: El estado debe ser uno de - pending, confirmed, shipped, delivered.
+ *     parameters:
+ *       - in: path
+ *         name: cid
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               state:
+ *                 type: string
+ *                 enum: [pending, confirmed, shipped, delivered]
+ *             required: [state]
+ *     responses:
+ *       200:
+ *         description: Estado actualizado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponse'
+ *       400:
+ *         description: Estado inválido o ausente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: 'error'
+ *               code: 'INVALID_STATE'
+ *               message: 'El estado enviado no es válido.'
+ *               details: { provided: 'foo', allowed: ['pending', 'confirmed', 'shipped', 'delivered'] }
+ *       404:
+ *         $ref: '#/components/responses/PurchaseNotFoundError'
+ */
+router.patch('/:cid/state', cartsController.updateState)
+
 export default router

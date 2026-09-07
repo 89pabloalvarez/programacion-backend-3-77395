@@ -1,17 +1,23 @@
-FROM node:20-alpine
+FROM node:20-alpine AS deps
 
 WORKDIR /usr/src/app
 
-# Se copian primero los manifiestos para aprovechar la cache de capas de Docker: si no cambian package.json/package-lock.json, no se reinstalan dependencias en cada build.
 COPY package*.json ./
-
 RUN npm install
 
-# Recién acá se copia el resto del código (lo que sí cambia seguido)..
+FROM node:20-alpine AS runner
+
+ENV NODE_ENV=production
+WORKDIR /usr/src/app
+
+RUN addgroup -S nodejs && adduser -S nodejs -G nodejs
+
+COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY . .
 
-# Puerto en el que escucha la API (ver CONSTANTS.PORT / variable PORT).
+RUN chown -R nodejs:nodejs /usr/src/app
+USER nodejs
+
 EXPOSE 8080
 
-# Variables de entorno reales (Mongo, NODE_ENV, etc.) se pasan al correr el contenedor (--env-file .env o -e VAR=valor), nunca se hardcodean acá.
 CMD ["npm", "start"]

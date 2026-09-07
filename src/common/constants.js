@@ -34,6 +34,7 @@ export const CONSTANTS = Object.freeze({
     MOCK_QUANTITY_INVALID: 'Cantidad de mocks inválida.',
     MOCK_INSERT_FAILED: 'Error al guardar los mocks en la base de datos.',
     MOCKS_NO_PRODUCTS: 'No hay productos disponibles para generar carritos mock.',
+    INVALID_STATE: 'El estado enviado no es válido.',
     FILE_REQUIRED: 'Se debe adjuntar un archivo.',
     FILE_TYPE_NOT_ALLOWED: 'El tipo de archivo no está permitido.',
     FILE_TOO_LARGE: 'El archivo supera el tamaño máximo permitido.',

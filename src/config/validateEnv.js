@@ -1,6 +1,6 @@
 import logger from './logger.js'
 
-const REQUIRED_ENV_VARS = [
+const ATLAS_ENV_VARS = [
   'MONGO_USER',
   'MONGO_PASS',
   'MONGO_CLUSTER',
@@ -9,16 +9,17 @@ const REQUIRED_ENV_VARS = [
   'MONGO_ATLAS_SHARD'
 ]
 
-export const validateEnv = () => {
-  const missing = REQUIRED_ENV_VARS.filter((key) => {
-    const value = process.env[key]
-    return value === undefined || value === null || value.trim() === ''
-  })
+const isBlank = (value) => value === undefined || value === null || value.trim() === ''
 
-  if (missing.length > 0) {
-    const message = `Faltan variables de entorno obligatorias: ${missing.join(', ')}. ` +
+export const validateEnv = () => {
+  const hasMongoUri = !isBlank(process.env.MONGO_URI)
+  const missingAtlasVars = ATLAS_ENV_VARS.filter((key) => isBlank(process.env[key]))
+
+  if (!hasMongoUri && missingAtlasVars.length > 0) {
+    const message = 'No hay forma de conectar a MongoDB: definí MONGO_URI (Mongo local/docker-compose) ' +
+      `o completá las variables de Atlas faltantes: ${missingAtlasVars.join(', ')}. ` +
       'Revisá tu archivo .env (ver .env.example) antes de levantar el servidor.'
-    logger.fatal(message, { missing })
+    logger.fatal(message, { missingAtlasVars })
     console.error(`\n ${message}\n`)
     process.exit(1)
   }
