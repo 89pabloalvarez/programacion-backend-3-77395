@@ -450,7 +450,7 @@ Devuelve `status`, `environment`, `uptime`, `timestamp` y `database` (connected/
 
 ### Docker
 
-El `Dockerfile` es **multi-stage**: una etapa instala solo dependencias de producción (`npm install --omit=dev`) y la etapa final copia únicamente `node_modules` + el código, corriendo como usuario sin privilegios (no root). Esto mantiene la imagen liviana y evita empaquetar herramientas de testing (mocha/chai/supertest) que no hacen falta en producción.
+El `Dockerfile` es **multi-stage**: una etapa instala solo dependencias de producción (`npm install`) y la etapa final copia únicamente `node_modules` + el código, corriendo como usuario sin privilegios (no root). Esto mantiene la imagen liviana y evita empaquetar herramientas de testing (mocha/chai/supertest) que no hacen falta en producción.
 
 **Opción A — `docker-compose` (recomendada, ya incluye MongoDB):**
 ```bash
