@@ -4,17 +4,38 @@ API de backend para un ShipNow con un módulo de api funcional y un módulo de a
 
 ## 📌 Descripción
 
-Este proyecto expone:
-- APIs de productos, carritos, delivery y usuarios
-- APIs de mocks en `/api/mocks` para generar datos de prueba
-- vistas manejadas con Handlebars en `/` y `/realtimeproducts`
-- manejo de errores centralizado con `DomainError` y middleware global
-- log a bajo nivel en toda la arquitectura en capas 
+ShipNow es una API backend para gestión de pedidos y entregas: usuarios, productos, carritos (pedidos), entregas, carga de comprobantes/documentos y un módulo de mocks para generar datos de prueba.
+
+**Tecnologías**: Node.js + Express 5, MongoDB + Mongoose (con paginación vía `mongoose-paginate-v2`), Winston (logging), Multer (carga de archivos), Swagger (`swagger-jsdoc` + `swagger-ui-express`), Socket.IO, Mocha + Chai + Supertest (testing), Docker.
+
+**Arquitectura**: por capas, en `src/`:
+```
+routes/       -> definen los endpoints y su documentación Swagger; no acceden a la DB
+controllers/  -> reciben el request/response de Express, delegan a services
+services/     -> lógica de negocio y validaciones de dominio
+repositories/ -> único punto de acceso a Mongoose/MongoDB
+models/       -> schemas de Mongoose
+common/       -> constantes, errores de dominio (DomainError) y helpers compartidos
+config/       -> app de Express, conexión a Mongo, logger, Multer, Swagger, validación de env
+middlewares/  -> logging de requests, manejo global de errores, restricción en producción
+mocks/        -> mismo patrón de capas, pero para generar/insertar datos simulados
+```
+Esto se repite igual para `users`, `carts` (pedidos), `delivery` y `products`: ningún router accede a Mongo directamente, toda la lógica vive en `services/`, y `repositories/` es el único lugar que llama a los `models/`.
+
+Esto expone:
+- APIs de productos, carritos (pedidos), delivery (entregas) y usuarios
+- Carga de documentos/comprobantes con Multer (`/users/:id/documents`, `/delivery/:id/receipt`)
+- APIs de mocks en `/api/mocks` para generar datos de prueba (deshabilitadas en producción, ver más abajo)
+- Vistas manejadas con Handlebars en `/` y `/realtimeproducts`
+- Manejo de errores centralizado con `DomainError` y middleware global
+- Health check en `/health`
+- Logging estructurado con Winston (`logs/combined.log` y `logs/error.log`)
 
 ## 🚀 Instalación
 
 ```bash
 npm install
+cp .env.example .env      # completar con credenciales reales (ver sección de Variables de entorno)
 ```
 
 ## 🧾 Logging y monitoreo básico
@@ -30,8 +51,8 @@ El proyecto usa Winston como logger centralizado para registrar eventos tanto en
 - `fatal`
 
 ### Comportamiento por entorno
-- En desarrollo se muestran logs más detallados, incluyendo `debug`.
-- En producción el logger se enfoca en mensajes relevantes como `info`, `warning`, `error` y `fatal`.
+- En desarrollo/testing se muestran logs más detallados en consola, incluyendo `debug`.
+- **En producción la consola queda deshabilitada por completo**: solo se escribe a archivo. El detalle de qué se loguea sigue siendo configurable con `LOG_LEVEL` (por default `info` en producción).
 
 ### Endpoint de prueba del logger
 
@@ -39,16 +60,12 @@ El proyecto usa Winston como logger centralizado para registrar eventos tanto en
 curl http://localhost:8080/api/logger/test
 ```
 
-Este endpoint genera pruebas de todos los niveles para verificar que los registros aparecen en consola y en los archivos de logs.
+Este endpoint genera pruebas de todos los niveles para verificar que los registros aparecen en consola (fuera de producción) y en los archivos de logs. **Deshabilitado en producción** (ver sección "Endpoints internos en producción").
 
 ### Archivos de logs
-- Los logs generales se almacenan en la carpeta `logs/`.
-- Los errores y fallas críticas se guardan en archivos rotativos con nombre tipo `error-YYYY-MM-DD.log`.
-- La información y avisos se estarian guardando en archivos rotativos bajo el nombre `application-YYYY-MM-DD.log`.
-- La rotación limita tamaño y cantidad de archivos mantenidos.
-
-### Git
-- Los archivos generados en `logs/` quedan excluidos del repositorio mediante `.gitignore`.
+- `logs/combined.log`(application): actividad general, hasta el nivel configurado (`LOG_LEVEL`).
+- `logs/error.log`: solo `error` y `fatal`, para poder monitorear problemas sin filtrar el log completo.
+- Ambos quedan excluidos del repositorio (`.gitignore`) y de la imagen Docker (`.dockerignore`) — son datos generados en tiempo de ejecución, no código.
 
 ## 📦 Variables de entorno
 
@@ -89,6 +106,7 @@ npm start
 - `GET /api/carts/:id`
 - `POST /api/carts`
 - `PUT /api/carts/:cid/product/:pid`
+- `PATCH /api/carts/:cid/state`
 - `DELETE /api/carts/:cid/product/:pid`
 
 - `GET /api/users`
@@ -363,7 +381,7 @@ Esto corre `cross-env NODE_ENV=test mocha`, que:
 | Archivo | Endpoints | Casos cubiertos |
 |---|---|---|
 | `test/users.test.js` | `GET /api/users`, `POST /api/users`, `GET /api/users/:id` | listado paginado, creación válida (201), falta de password (`USER_CREATE_NOT_PASSWORD`), campo con tipo inválido (`VALIDATION_FAILED`), búsqueda por id existente, `BAD_ID`, `USER_NOT_FOUND` |
-| `test/orders.test.js` | `GET /api/carts`, `POST /api/carts`, `GET /api/carts/:id` | listado paginado, creación de pedido válido (201) usando un producto de prueba, body que no es array (`PRODUCT_CREATE_MUST_BE_ARRAY`), cantidad inválida (`VALIDATION_FAILED`), producto inexistente (`VALIDATION_FAILED`), búsqueda por id existente, `BAD_ID`, `PURCHASE_NOT_FOUND` |
+| `test/orders.test.js` | `GET /api/carts`, `POST /api/carts`, `GET /api/carts/:id`, `PATCH /api/carts/:cid/state` | listado paginado, creación de pedido válido (201) usando un producto de prueba, body que no es array (`PRODUCT_CREATE_MUST_BE_ARRAY`), cantidad inválida (`VALIDATION_FAILED`), producto inexistente (`VALIDATION_FAILED`), búsqueda por id existente, `BAD_ID`, `PURCHASE_NOT_FOUND`, flujo completo de creación + actualización de estado (éxito y `INVALID_STATE`) |
 | `test/mocks.test.js` | `GET/POST /api/mocks/users/*`, `POST /api/mocks/carts/insert` | generación sin persistir, cantidad inválida (`MOCK_QUANTITY_INVALID`), inserción real en Mongo, inserción de pedidos mock cuando no hay productos (`MOCKS_NO_PRODUCTS`) y cuando sí hay |
 | `test/logger.test.js` | `GET /api/logger/test` | respuesta 200 y estructura `{ success, message }` |
 | `test/swagger.test.js` | `GET /api/docs`, ruta inexistente | Swagger responde 200 en HTML; ruta inexistente devuelve 404 con el formato de error (`ROUTE_NOT_FOUND`) documentado |
@@ -395,20 +413,22 @@ Ver `.env.example`. Resumen:
 |---|---|---|
 | `NODE_ENV` | No (default `development`) | `development` \| `test` \| `production` |
 | `PORT` | No (default `8080`) | Puerto donde escucha la API |
-| `LOG_LEVEL` | No (default `test`) | Override del nivel de logs (`debug`, `info`, etc.) |
-| `MONGO_USER`, `MONGO_PASS`, `MONGO_CLUSTER`, `MONGO_DB_NAME`, `MONGO_SHARD`, `MONGO_ATLAS_SHARD` | **Sí** | Conexión a MongoDB Atlas |
+| `LOG_LEVEL` | No | Override del nivel de logs (`debug`, `info`, etc.) |
+| `MONGO_URI` | Sí, **si no** se usan las de Atlas | Conexión directa a Mongo (local o el servicio `mongo` de docker-compose) |
+| `MONGO_USER`, `MONGO_PASS`, `MONGO_CLUSTER`, `MONGO_DB_NAME`, `MONGO_SHARD`, `MONGO_ATLAS_SHARD` | Sí, **si no** se usa `MONGO_URI` | Conexión a un cluster de MongoDB Atlas |
 
-**La app valida estas variables al arrancar** (`config/validateEnv.js`, llamado desde `server.js`): si falta alguna variable de Mongo, el proceso corta con `process.exit(1)` y un mensaje claro en logs y consola, **antes** de intentar conectar a la base o abrir el puerto. Si la conexión a Mongo falla igual, el servidor tampoco levanta el puerto (no queda "a medias").
+Hay dos formas válidas de conectar a Mongo (ver `config/mongo.js`): con `MONGO_URI` directo (Mongo local / docker-compose), o con el set completo de variables de Atlas. `config/validateEnv.js` exige que esté completa **al menos una** de las dos combinaciones — si no, corta el arranque con `process.exit(1)` y un mensaje claro, **antes** de intentar conectar a la base o abrir el puerto. Si la conexión a Mongo falla igual, el servidor tampoco levanta el puerto (no queda "a medias"). `JWT_SECRET` y URLs de servicios externos no aplican todavía: el proyecto no tiene autenticación ni integra servicios externos.
 
 ### Cómo correr todo
 
+**Local (sin Docker):**
 ```bash
 npm install
-cp .env.example .env      # completar con credenciales reales
+cp .env.example .env      # completar con MONGO_URI o credenciales de Atlas
 npm start                 # API en http://localhost:8080
 ```
 
-Tests (usa `.env.test`, base de datos separada):
+**Tests** (usa `.env.test`, base de datos separada):
 ```bash
 cp .env.test.example .env.test   # completar
 npm test
@@ -430,30 +450,37 @@ Devuelve `status`, `environment`, `uptime`, `timestamp` y `database` (connected/
 
 ### Docker
 
-**Build:**
+El `Dockerfile` es **multi-stage**: una etapa instala solo dependencias de producción (`npm install --omit=dev`) y la etapa final copia únicamente `node_modules` + el código, corriendo como usuario sin privilegios (no root). Esto mantiene la imagen liviana y evita empaquetar herramientas de testing (mocha/chai/supertest) que no hacen falta en producción.
+
+**Opción A — `docker-compose` (recomendada, ya incluye MongoDB):**
+```bash
+docker compose up --build
+```
+Esto levanta dos servicios: `mongo` (MongoDB local, con `healthcheck` vía `mongosh ping`) y `api` (espera a que `mongo` esté *healthy* antes de arrancar, gracias a `depends_on: condition: service_healthy`). La API usa `MONGO_URI=mongodb://mongo:27017/shipnow` internamente — no hace falta ningún `.env` para este modo. Queda disponible en `http://localhost:8080`.
+
+```bash
+docker compose down          # apaga los servicios
+docker compose down -v       # además borra el volumen de datos de Mongo
+```
+
+**Opción B — Build/run manual (contra tu propio Mongo o Atlas):**
 ```bash
 docker build -t shipnow-api .
-```
-
-**Run** (variables desde un archivo `.env`):
-```bash
 docker run -p 8080:8080 --env-file .env shipnow-api
 ```
-
-O pasando variables sueltas con `-e`:
+O pasando variables sueltas:
 ```bash
 docker run -p 8080:8080 \
   -e NODE_ENV=production \
-  -e MONGO_USER=... -e MONGO_PASS=... -e MONGO_CLUSTER=... \
-  -e MONGO_DB_NAME=... -e MONGO_SHARD=... -e MONGO_ATLAS_SHARD=... \
+  -e MONGO_URI=mongodb://host.docker.internal:27017/shipnow \
   shipnow-api
 ```
 
-La API queda disponible en `http://localhost:8080`. Con el contenedor corriendo, probar:
+Con el contenedor corriendo (cualquiera de las dos opciones), probar:
 - `GET http://localhost:8080/health`
 - `GET http://localhost:8080/api/docs`
 - `GET http://localhost:8080/api/users` (o cualquier endpoint principal)
 
 ### Qué NO se sube al repo ni a la imagen
 
-`node_modules`, `.env`/`.env.test` (credenciales reales), `.git`, `logs/`, `uploads/` (archivos subidos por usuarios), `coverage`, archivos temporales — ver `.gitignore` y `.dockerignore`. Los logs y los archivos subidos son datos generados en tiempo de ejecución, no artefactos de build: no deben viajar ni al control de versiones ni a la imagen Docker.
+`node_modules`, `.env`/`.env.test` (credenciales reales), `.git`, `logs/`, `uploads/` (archivos subidos por usuarios), `coverage`, archivos temporales — ver `.gitignore` y `.dockerignore`. Los logs y los archivos subidos son datos generados en tiempo de ejecución, no artefactos de build: no deben viajar ni al control de versiones ni a la imagen Docker. La carpeta `uploads/` se entrega vacía (sin archivos de pruebas locales).
